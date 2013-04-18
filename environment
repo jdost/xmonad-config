@@ -1,0 +1,8 @@
+export WINDOW_MANAGER="xmonad"
+
+type xcompmgr > /dev/null && ! ps -A | grep xcompmgr > /dev/null && xcompmgr -Ffn &
+type unclutter > /dev/null && ! ps -A | grep unclutter > /dev/null && unclutter -idle 1 &
+xsetroot -cursor_name left_ptr
+
+type urxvtd > /dev/null && ! ps -A | grep urxvtd > /dev/null && urxvtd -q -o -f
+# vim: ft=sh

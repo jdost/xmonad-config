@@ -1,0 +1,14 @@
+background no
+out_to_console yes
+out_to_x no
+update_interval 0.5
+total_run_times 0
+use_spacer none
+
+mpd_host 127.0.0.1
+mpd_port 9009
+
+TEXT
+ ^fg(\#66CC66)MPD: \
+ ^fg()${mpd_smart} \
+ (${mpd_status})

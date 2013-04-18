@@ -1,0 +1,31 @@
+background no
+out_to_console yes
+out_to_x no
+update_interval 0.5
+total_run_times 0
+use_spacer none
+
+template0 ^pa(;0)^r(1x3)^r(1x6)^r(1x9)^r(1x12)^r(1x15)^pa(;2)
+
+TEXT
+^fg(\#66cc66)CPU ^fg()${if_match ${cpu cpu0} <= 9}0${endif}${cpu cpu0}% \
+\
+^fg(\#464646)${template0}\
+^bg(\#464646)^fg() \
+^fg(\#66cc66)MEM ^fg()${mem}/${memmax} \
+\
+^fg(\#515151)${template0}\
+^bg(\#515151)^fg() \
+^fg(\#66cc66)LOAD ^fg()${loadavg} \
+\
+^fg(\#5D5D5D)${template0}\
+^bg(\#5D5D5D)^fg() \
+^fg(\#66cc66)NET \
+^fg(\#99ff99)UP ^fg()${upspeedf wlan0} \
+^fg(\#99ff99)DOWN^fg() ${downspeedf wlan0} \
+\
+^fg(\#666666)${template0}\
+^bg(\#666666)^fg()\
+  ${time %H:%M:%S}   \
+
+# vim: ft=conkyrc
