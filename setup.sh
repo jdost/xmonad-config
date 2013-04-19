@@ -34,7 +34,9 @@ aurGet() {
       rm "$1.tar.gz"
    fi
    cd "$1"
-   makepkg
+   if makepkg > /dev/null; then
+      sudo pacman -U "$(ls -t --file-type | grep tar | head -1)"
+   fi
 }
 
 run_pacman() {
