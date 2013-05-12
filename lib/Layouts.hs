@@ -4,9 +4,11 @@ module Layouts (
   , normalLayout
 
   , BrowserConf (..)
+  , defaultBrowserConf
   , browserLayout
 
   , IMConf (..)
+  , defaultIMConf
   , imLayout
   ) where
 
@@ -57,7 +59,7 @@ defaultBrowserConf = BrowserConf
   , bspace = _space
   }
 -- TwoPane delta ratio
-browserLayout :: (LayoutClass l a) => BrowserConf -> ModifiedLayout Spacing TwoPane a
+--browserLayout :: (LayoutClass l a) => BrowserConf -> ModifiedLayout Spacing TwoPane a
 browserLayout c = spacing s $ TwoPane d r
   where
     s = (bspace c)

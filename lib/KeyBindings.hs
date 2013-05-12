@@ -120,7 +120,7 @@ multiHeadNavigation monitorKeys =
   ]
   ++
   -- mod + shift + [monitorKeys] shifts window to display
-  [((m, k) , screenWorkspace screen >>= flip whenJust (windows . W.shift))
+  [((ms, k) , screenWorkspace screen >>= flip whenJust (windows . W.shift))
     | (k, screen) <- zip monitorKeys [0..]
   ]
 
