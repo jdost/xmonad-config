@@ -1,4 +1,5 @@
-if [[ -z "$WINDOW_MANAGER" || "$WINDOW_MANAGER" == "xmonad" ]]; then
+if [[ -n "$XINIT_LOAD" &&
+   ( -z "$WINDOW_MANAGER" || "$WINDOW_MANAGER" == "xmonad" ) ]]; then
    export WINDOW_MANAGER="xmonad"
 
    type xcompmgr > /dev/null && ! ps -A | grep xcompmgr > /dev/null && xcompmgr -Ffn &
