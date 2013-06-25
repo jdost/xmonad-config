@@ -109,25 +109,39 @@ hooks "Zito" = composeAll . concat $
 conky_loc :: String
 conky_loc = "~/.xmonad/conky/"
 
+tr_dzen :: String -> DzenConf
+tr_dzen "Laurie" = defaultDzenConf {
+      xPosition = Just 600
+    , width = Just 1000
+    , alignment = Just RightAlign
+    }
+tr_dzen "Zito" = defaultDzenConf {
+      xPosition = Just 1000
+    , width = Just 920
+    , alignment = Just RightAlign
+    }
+
+tl_dzen :: String -> DzenConf
+tl_dzen "Laurie" = defaultDzenConf {
+      width = Just 600
+    }
+tl_dzen "Zito" = defaultDzenConf {
+      width = Just 1000
+    }
+
 main = do
   -- get hostname, use to distinguish systems
   hostname <- getHostname
   display <- openDisplay ""
   screens <- xineramaQueryScreens display
   -- spawn dzen2 bars
-  spawnPipe $ conkyDzen (conky_loc ++ "tr_main.conky") defaultDzenConf {
-      xPosition = Just 600
-    , width = Just 1000
-    , alignment = Just RightAlign
-    }
+  spawnPipe $ conkyDzen (conky_loc ++ "tr_main.conky") (tr_dzen hostname)
   spawnPipe $ conkyDzen (conky_loc ++ "br_main." ++ hostname ++ ".conky") defaultDzenConf {
       yPosition = Just 1200
     , width = Just 2000
     , alignment = Just RightAlign
     }
-  dh_dzen <- spawnPipe $ dzen defaultDzenConf {
-      width = Just 600
-    }
+  dh_dzen <- spawnPipe $ dzen (tl_dzen hostname)
   spawnPipe $ tray defaultTrayConf
   -- make xmonad
   xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
