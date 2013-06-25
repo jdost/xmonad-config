@@ -38,7 +38,7 @@ import XMonad.Layout.IndependentScreens ( onCurrentScreen, workspaces' )
 import XMonad.Prompt (XPConfig(..), defaultXPConfig, defaultXPKeymap, deleteAllDuplicates, XPPosition(..) )
 import XMonad.Prompt.Shell (shellPrompt)
 
-import XMonad.Actions.Search (promptSearchBrowser, intelligent, google, hoogle, amazon,
+import XMonad.Actions.Search (promptSearch, intelligent, google, amazon,
   wikipedia, youtube, maps, namedEngine, (!>), prefixAware, searchEngine)
 
 import System.Exit ( exitWith, ExitCode(ExitSuccess) )
@@ -215,7 +215,7 @@ processControl promptConf =
   ]
   ++
   -- This is an experiment with the search prompt
-  [ ((ms       , xK_p), promptSearchBrowser searchConf browser searchEngines) ]
+  [ ((ms       , xK_p), promptSearch searchConf searchEngines) ]
   where
       searchConf = promptConf
         { bgColor = fgColor promptConf --"#EEEEEE"
@@ -224,18 +224,15 @@ processControl promptConf =
         , bgHLight = fgHLight promptConf --"#6644EE"
         , historySize = 0
         }
-      browser = "/usr/bin/dwb"
       searchEngines = intelligent seList
-      seList = (
-          namedEngine "y" youtube
-        !> namedEngine "w" wikipedia
-        !> namedEngine "m" maps
-        !> namedEngine "a" amazon
-        !> namedEngine "h" hoogle
-        !> searchEngine "aur" "http://aur.archlinux.org/packages.php?O=0&do_search=Go&K="
-        !> searchEngine "arch" "http://www.archlinux.org/packages/?limit=50&q="
-        !> (prefixAware $ namedEngine "g" google)
-        )
+      seList = foldr1 (!>) [
+          namedEngine "yt" youtube
+        , namedEngine "wiki" wikipedia
+        , namedEngine "amazon" amazon
+        , namedEngine "maps" maps
+        , searchEngine "aur" "http://aur.archlinux.org/packages.php?O=0&do_search=Go&K="
+        , searchEngine "arch" "http://www.archlinux.org/packages/?limit=50&q="
+        , (prefixAware google) ]
 
 data MusicCommands = MusicCommands
   { next :: String
