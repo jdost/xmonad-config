@@ -49,7 +49,7 @@ defaultDzenConf :: DzenConf
 defaultDzenConf = DzenConf
   { xPosition = Just 0
   , yPosition = Just 0
-  , screen    = Just 1
+  , screen    = Just 0
   , width     = Nothing
   , height    = Just 15
   , alignment = Just LeftAlign
