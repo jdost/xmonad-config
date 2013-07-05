@@ -22,6 +22,13 @@ link() {
    # Shell/Environment
    linkIfNot environment $HOME/.local/environment/xmonad
    linkIfNot "" $HOME/.xmonad
+
+   LAYOUT_PATH="lib/machines/$HOSTNAME.hs"
+   if [ ! -e $LAYOUT_PATH ]; then
+      LAYOUT_PATH= "lib/machines/Default.hs"
+   fi
+
+   linkIfNot $LAYOUT_PATH $HOME/.xmonad/lib/CurrentMachine.hs
 } # }}}
 ####################################################################################
 # Install - Arch {{{

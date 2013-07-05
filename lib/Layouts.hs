@@ -79,7 +79,7 @@ defaultIMConf = IMConf
   , ispace = _space
   }
 -- withIM (1/5) (Role "buddy_list") (Grid)
-imLayout :: (LayoutClass l a) => IMConf -> ModifiedLayout Spacing (ModifiedLayout AddRoster Grid) a
+--imLayout :: (LayoutClass l a) => IMConf -> ModifiedLayout Spacing (ModifiedLayout AddRoster Grid) a
 imLayout c = spacing s $ withIM lr l (Grid)
   where
     s = (ispace c)
