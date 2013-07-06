@@ -60,12 +60,13 @@ mc = m .|. c
 
 type KeyBinding = ((KeyMask, KeySym), (X ()))
 
-xmonadBasics :: String -> [KeyBinding]
-xmonadBasics killcmd =
+xmonadBasics :: String -> String -> [KeyBinding]
+xmonadBasics killcmd lockcmd =
   -- These are the base keys, for things like starting/stopping xmonad
   [ ((m       , xK_q), spawn killcmd)
   , ((ms      , xK_q), io (exitWith ExitSuccess))
   , ((ms , xK_Return), spawn defaultTerminal)
+  , ((m       , xK_z), spawn lockcmd)
   ]
 
 windowNavigation :: [KeyBinding]

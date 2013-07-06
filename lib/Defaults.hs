@@ -15,5 +15,8 @@ defaultBorderWidth = 0
 defaultKillCmd :: String
 defaultKillCmd = "killall dzen2 trayer conky; xmonad --recompile; xmonad --restart"
 
+defaultLockCmd :: String
+defaultLockCmd = "ncmpcpp pause; xscreensaver-command --lock"
+
 defaultMHKeys :: [KeySym]
 defaultMHKeys = [xK_w, xK_e, xK_r]

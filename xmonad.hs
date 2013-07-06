@@ -1,11 +1,8 @@
 import XMonad
 import XMonad.Core
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP)
-import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks)
+import XMonad.Hooks.ManageDocks (manageDocks)
 import XMonad.Hooks.UrgencyHook (withUrgencyHook, NoUrgencyHook(NoUrgencyHook) )
-import XMonad.Layout.LayoutHints (layoutHints)
-import XMonad.Layout.NoBorders (smartBorders, noBorders)
-import XMonad.Layout.PerWorkspace (onWorkspace)
 import XMonad.Util.Run (spawnPipe)
 
 import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
@@ -13,6 +10,7 @@ import XMonad.Actions.UpdatePointer (updatePointer, PointerPosition(Relative) )
 
 import qualified Data.Map as M
 import Data.List (transpose)
+import Graphics.X11.Types (Window)
 import Graphics.X11.ExtraTypes
 import Graphics.X11.Xlib (openDisplay)
 import Graphics.X11.Xinerama (xineramaQueryScreens)
@@ -22,8 +20,9 @@ import Colors as C
 import Defaults
 import Hooks
 import KeyBindings
-import Layouts
 import StatusBars
+
+import CurrentMachine
 
 workspaces' :: String -> [(String, String)]
 workspaces' "Laurie" = [("0_1", "1:main"), ("0_2", "2:web"),
@@ -33,6 +32,10 @@ workspaces' "Zito" = concat $ transpose [
      ("0_5", "")],
     [("1_1", "1:irc"), ("1_2", "2:mon"), ("1_3", "3:misc"),
      ("1_4", ""), ("1_5", "")]
+  ]
+workspaces' "Fernando" = concat $ transpose [
+    [("0_1", "1:main"), ("0_2", "2:web"), ("0_3", "3:code"), ("0_4", "4:vm")]
+  , [("1_1", "1:irc"), ("1_2", "2:im"), ("1_3", "3:code"), ("1_4", "4:mon")]
   ]
 
 home_bin :: String
@@ -47,7 +50,7 @@ _ExtraCommands "Laurie" = defaultExtraCommands
 
 keys' :: String -> XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' "Laurie" c = M.fromList $ []
-  ++ KeyBindings.xmonadBasics defaultKillCmd
+  ++ KeyBindings.xmonadBasics defaultKillCmd defaultLockCmd
   ++ KeyBindings.windowNavigation
   ++ KeyBindings.windowSizing
   ++ KeyBindings.layoutControl
@@ -61,7 +64,17 @@ keys' "Laurie" c = M.fromList $ []
   where
       ws = map fst $ workspaces' "Laurie"
 keys' "Zito" c = M.fromList $ []
-  ++ KeyBindings.xmonadBasics defaultKillCmd
+  ++ KeyBindings.xmonadBasics defaultKillCmd defaultLockCmd
+  ++ KeyBindings.windowNavigation
+  ++ KeyBindings.windowSizing
+  ++ KeyBindings.layoutControl
+  ++ KeyBindings.processControl defaultPromptConf
+  ++ KeyBindings.musicControl defaultMusicCommands
+  ++ KeyBindings.extraKeys defaultExtraCommands
+  ++ KeyBindings.workspaceChanging c
+  ++ KeyBindings.multiHeadNavigation defaultMHKeys
+keys' "Fernando" c = M.fromList $ []
+  ++ KeyBindings.xmonadBasics defaultKillCmd defaultLockCmd
   ++ KeyBindings.windowNavigation
   ++ KeyBindings.windowSizing
   ++ KeyBindings.layoutControl
@@ -71,26 +84,13 @@ keys' "Zito" c = M.fromList $ []
   ++ KeyBindings.workspaceChanging c
   ++ KeyBindings.multiHeadNavigation defaultMHKeys
 
-layouts "Laurie" = avoidStruts $ smartBorders $ layoutHints (normal ||| Mirror normal ||| Full)
-  where
-    nconf = defaultNormalConf
-    normal = normalLayout nconf
-layouts "Zito" = avoidStruts . smartBorders . layoutHints $
-  {-onWorkspace "0_1" (Mirror normal ||| Full) $-}
-  {-onWorkspace "0_2" (browser ||| Full) $-}
-  {-onWorkspace "0_3" (Full) $-}
-  {-onWorkspace "1_2" (Mirror normal ||| Full) $-}
-  (normal ||| Mirror normal ||| Full)
-  where
-    normal = normalLayout defaultNormalConf
-    browser = browserLayout defaultBrowserConf
-
 layoutAliases :: [(String, String)]
 layoutAliases =
   [ ("Hinted Spacing 4 ResizableTall", " RT")
   , ("Hinted Mirror Spacing 4 ResizableTall", "MRT")
   , ("Hinted Full", " F ")
-  , ("Hinted Spacing 4 TwoPane", "2P")
+  , ("Hinted Spacing 4 TwoPane", " 2P")
+  , ("Hinted Spacing 4 IM Grid", " IM")
   ]
 
 hooks :: String -> ManageHook
@@ -100,6 +100,12 @@ hooks "Laurie" = composeAll . concat $
    , setShifts "0_2" browsers
    ]
 hooks "Zito" = composeAll . concat $
+  [ setShifts "0_2" browsers
+  , setShifts "0_3" games
+  , setShifts "0_4" ["VirtualBox"]
+  , setIgnores ignores
+  ]
+hooks "Fernando" = composeAll . concat $
   [ setShifts "0_2" browsers
   , setShifts "0_3" games
   , setShifts "0_4" ["VirtualBox"]
@@ -120,12 +126,20 @@ tr_dzen "Zito" = defaultDzenConf {
     , width = Just 920
     , alignment = Just RightAlign
     }
+tr_dzen "Fernando" = defaultDzenConf {
+      xPosition = Just 1000
+    , width = Just 920
+    , alignment = Just RightAlign
+    }
 
 tl_dzen :: String -> DzenConf
 tl_dzen "Laurie" = defaultDzenConf {
       width = Just 600
     }
 tl_dzen "Zito" = defaultDzenConf {
+      width = Just 1000
+    }
+tl_dzen "Fernando" = defaultDzenConf {
       width = Just 1000
     }
 
