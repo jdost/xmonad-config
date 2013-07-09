@@ -3,6 +3,7 @@ import XMonad.Core
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP)
 import XMonad.Hooks.ManageDocks (manageDocks)
 import XMonad.Hooks.UrgencyHook (withUrgencyHook, NoUrgencyHook(NoUrgencyHook) )
+import XMonad.Layout.IndependentScreens (countScreens)
 import XMonad.Util.Run (spawnPipe)
 
 import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
@@ -13,7 +14,6 @@ import Data.List (transpose)
 import Graphics.X11.Types (Window)
 import Graphics.X11.ExtraTypes
 import Graphics.X11.Xlib (openDisplay)
-import Graphics.X11.Xinerama (xineramaQueryScreens)
 import System.Posix.Unistd (getSystemID, nodeName)
 
 import Colors as C
@@ -147,7 +147,7 @@ main = do
   -- get hostname, use to distinguish systems
   hostname <- getHostname
   display <- openDisplay ""
-  screens <- xineramaQueryScreens display
+  screens <- countScreens
   -- spawn dzen2 bars
   spawnPipe $ conkyDzen (conky_loc ++ "tr_main.conky") (tr_dzen hostname)
   spawnPipe $ conkyDzen (conky_loc ++ "br_main." ++ hostname ++ ".conky") defaultDzenConf {
@@ -156,6 +156,10 @@ main = do
     , alignment = Just RightAlign
     }
   dh_dzen <- spawnPipe $ dzen (tl_dzen hostname)
+  dh_dzen2 <- spawnPipe $ dzen (defaultDzenConf {
+    width = Just 1000
+  , screen = Just 1
+  })
   spawnPipe $ tray defaultTrayConf
   -- make xmonad
   xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
@@ -173,8 +177,14 @@ main = do
     , manageHook = manageHook defaultConfig <+> hooks hostname <+> manageDocks
 
     , logHook = do
-        dynamicLogWithPP $ defaultDHConf dh_dzen "0" (workspaces' hostname) layoutAliases
+        --dynamicLogWithPP $ defaultDHConf dh_dzen "0" (workspaces' hostname) layoutAliases
         fadeInactiveLogHook 1.0
+        if (screens > 1)
+          then do
+            dynamicLogWithPP $ defaultDHConf dh_dzen2 "1" (workspaces' hostname) layoutAliases
+            dynamicLogWithPP $ defaultDHConf dh_dzen "0" (workspaces' hostname) layoutAliases
+          else do
+            dynamicLogWithPP $ defaultDHConf dh_dzen "0" (workspaces' hostname) layoutAliases
     }
 
 getHostname :: IO String
