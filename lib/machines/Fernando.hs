@@ -9,7 +9,9 @@ import XMonad.Layout.PerWorkspace (onWorkspace)
 import XMonad.Layout.NoBorders (smartBorders)
 
 layouts _ = avoidStruts $ smartBorders $ layoutHints
+    $ onWorkspace "0_1" (normal ||| Full)
     $ onWorkspace "1_2" (im)
+    $ onWorkspace "1_4" (Mirror normal ||| Full)
     $ (normal ||| Mirror normal ||| Full)
   where
     nconf = defaultNormalConf
