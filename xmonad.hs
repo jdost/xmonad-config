@@ -143,6 +143,13 @@ tl_dzen "Fernando" = defaultDzenConf {
       width = Just 1000
     }
 
+spawn_mpd :: Bool -> String
+spawn_mpd True = conkyDzen (conky_loc ++ "bl_main.conky") defaultDzenConf {
+      yPosition = Just 1200
+    , width = Just 900
+    }
+spawn_mpd _ = ""
+
 main = do
   -- get hostname, use to distinguish systems
   hostname <- getHostname
@@ -152,9 +159,11 @@ main = do
   spawnPipe $ conkyDzen (conky_loc ++ "tr_main.conky") (tr_dzen hostname)
   spawnPipe $ conkyDzen (conky_loc ++ "br_main." ++ hostname ++ ".conky") defaultDzenConf {
       yPosition = Just 1200
-    , width = Just 2000
+    , xPosition = if show_mpd then Just 500 else Just 0
+    , width = if show_mpd then Just 1500 else Just 2000
     , alignment = Just RightAlign
     }
+  spawnPipe $ (spawn_mpd show_mpd)
   dh_dzen <- spawnPipe $ dzen (tl_dzen hostname)
   spawnPipe $ tray defaultTrayConf
   -- make xmonad
