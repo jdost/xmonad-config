@@ -9,6 +9,8 @@ mpd_host 127.0.0.1
 mpd_port 9009
 
 TEXT
- ^fg(\#66CC66)MPD: \
+ ^fg(\#66FF66)MPD: \
  ^fg()${mpd_smart} \
  (${mpd_status})
+
+# vim: ft=conkyrc
