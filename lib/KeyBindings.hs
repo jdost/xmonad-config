@@ -46,6 +46,8 @@ import Graphics.X11.Types
 import Graphics.X11.ExtraTypes
 import Data.List (isPrefixOf, nub, filter, notElem)
 
+import Passwords
+
 -- alias the lead keys
 m :: KeyMask
 m = mod4Mask
@@ -216,7 +218,9 @@ processControl promptConf =
   ]
   ++
   -- This is an experiment with the search prompt
-  [ ((ms       , xK_p), promptSearch searchConf searchEngines) ]
+  [ ((ms       , xK_p), promptSearch searchConf searchEngines)
+  , ((mc       , xK_p), passwordPrompt passConf)
+  ]
   where
       searchConf = promptConf
         { bgColor = fgColor promptConf --"#EEEEEE"
@@ -234,6 +238,9 @@ processControl promptConf =
         , searchEngine "aur" "http://aur.archlinux.org/packages.php?O=0&do_search=Go&K="
         , searchEngine "arch" "http://www.archlinux.org/packages/?limit=50&q="
         , (prefixAware google) ]
+      passConf = promptConf
+        { historySize = 0
+        }
 
 data MusicCommands = MusicCommands
   { next :: String
