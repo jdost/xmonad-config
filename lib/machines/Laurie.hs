@@ -13,7 +13,10 @@ show_mpd = False
 
 layouts _ = avoidStruts $ smartBorders $ layoutHints
     $ onWorkspace "0_1" (normal ||| Full)
+    $ onWorkspace "0_2" (browser ||| Full)
     $ (normal ||| Mirror normal ||| Full)
   where
     nconf = defaultNormalConf
     normal = normalLayout nconf
+    bconf = defaultBrowserConf
+    browser = browserLayout bconf
