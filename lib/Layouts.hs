@@ -54,8 +54,8 @@ data BrowserConf = BrowserConf
 
 defaultBrowserConf :: BrowserConf
 defaultBrowserConf = BrowserConf
-  { bdelta = 1/2
-  , bratio = 3/100
+  { bdelta = 3/100
+  , bratio = 1/2
   , bspace = _space
   }
 -- TwoPane delta ratio
