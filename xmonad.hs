@@ -16,6 +16,8 @@ import Graphics.X11.ExtraTypes
 import Graphics.X11.Xlib (openDisplay)
 import System.Posix.Unistd (getSystemID, nodeName)
 
+import Control.Monad (when)
+
 import Colors as C
 import Defaults
 import Hooks
@@ -186,14 +188,7 @@ main = do
     , manageHook = manageHook defaultConfig <+> hooks hostname <+> manageDocks
 
     , logHook = do
-        --dynamicLogWithPP $ defaultDHConf dh_dzen "0" (workspaces' hostname) layoutAliases
-        fadeInactiveLogHook 1.0
-        if (screens > 1)
-          then do
-            dynamicLogWithPP $ defaultDHConf dh_dzen2 "1" (workspaces' hostname) layoutAliases
-            dynamicLogWithPP $ defaultDHConf dh_dzen "0" (workspaces' hostname) layoutAliases
-          else do
-            dynamicLogWithPP $ defaultDHConf dh_dzen "0" (workspaces' hostname) layoutAliases
+        dynamicLogWithPP $ defaultDHConf dh_dzen "0" (workspaces' hostname) layoutAliases
     }
 
 getHostname :: IO String
