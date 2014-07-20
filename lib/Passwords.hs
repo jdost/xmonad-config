@@ -14,6 +14,7 @@ import Data.Maybe (fromMaybe)
 import XMonad.Core
 import XMonad.Prompt
 
+getFiles :: FilePath -> IO [String]
 getFiles dir = do
   names <- getDirectoryContents dir
   let properNames = filter (`notElem` [ ".", "..", ".git" ]) names
@@ -25,11 +26,13 @@ getFiles dir = do
       else return [path]
   return (concat paths)
 
+getPasswords :: IO [String]
 getPasswords = do
   password_dir <- getPasswordDir
   files <- getFiles password_dir
   return $ map ((makeRelative password_dir) . dropExtension) files
 
+getPasswordDir :: IO FilePath
 getPasswordDir = do
   envDir <- lookupEnv "PASSWORD_STORE_DIR"
   home <- getEnv "HOME"
