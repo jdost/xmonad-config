@@ -14,6 +14,12 @@ import Data.Maybe (fromMaybe)
 import XMonad.Core
 import XMonad.Prompt
 
+passwordStoreEnvVar :: String
+passwordStoreEnvVar = "PASSWORD_STORE_DIR"
+
+passwordLength :: Int
+passwordLength = 24
+
 getFiles :: FilePath -> IO [String]
 getFiles dir = do
   names <- getDirectoryContents dir
@@ -34,7 +40,7 @@ getPasswords = do
 
 getPasswordDir :: IO FilePath
 getPasswordDir = do
-  envDir <- lookupEnv "PASSWORD_STORE_DIR"
+  envDir <- lookupEnv passwordStoreEnvVar
   home <- getEnv "HOME"
   return $ fromMaybe (home </> ".password_store") envDir
 
@@ -49,7 +55,7 @@ selectPassword :: [String] -> String -> X ()
 selectPassword passwords ps = spawn $ "pass " ++ args
   where
     args | ps `elem` passwords = "show -c " ++ ps
-         | otherwise = "generate -c " ++ ps ++ " 24"
+         | otherwise = "generate -c " ++ ps ++ " " ++ (show passwordLength)
 
 passwordPrompt :: XPConfig -> X ()
 passwordPrompt config = do
