@@ -20,3 +20,9 @@ defaultLockCmd = "ncmpcpp pause; xscreensaver-command --lock"
 
 defaultMHKeys :: [KeySym]
 defaultMHKeys = [xK_w, xK_e, xK_r]
+
+homeBin :: String
+homeBin = "~/.bin/"
+
+conkyFolder :: String
+conkyFolder = "~/.xmonad/conky/"

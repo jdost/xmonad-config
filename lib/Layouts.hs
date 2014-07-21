@@ -10,6 +10,7 @@ module Layouts (
   , IMConf (..)
   , defaultIMConf
   , imLayout
+  , layoutAliases
   ) where
 
 import XMonad.Core (LayoutClass)
@@ -19,6 +20,15 @@ import XMonad.Layout.TwoPane
 import XMonad.Layout.IM
 import XMonad.Layout.Grid
 import XMonad.Layout.Spacing
+
+layoutAliases :: [(String, String)]
+layoutAliases =
+  [ ("Hinted Spacing 4 ResizableTall", " RT")
+  , ("Hinted Mirror Spacing 4 ResizableTall", "MRT")
+  , ("Hinted Full", " F ")
+  , ("Hinted Spacing 4 TwoPane", " 2P")
+  , ("Hinted Spacing 4 IM Grid", " IM")
+  ]
 
 _space :: Int
 _space = 4
