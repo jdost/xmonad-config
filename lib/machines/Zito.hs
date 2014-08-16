@@ -58,9 +58,9 @@ tl_dzen = defaultDzenConf {
       width = Just 1000
     }
 
-tr_dzen :: DzenConf
-tr_dzen = defaultDzenConf {
+tr_dzen :: Int -> DzenConf
+tr_dzen w = defaultDzenConf {
       xPosition = Just 1000
-    , width = Just 920
+    , width = Just (w - 1000)
     , alignment = Just RightAlign
     }

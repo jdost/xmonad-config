@@ -14,6 +14,8 @@ module StatusBars (
 
   , defaultTrayConf
   , tray
+
+  , getScreenWidth
   ) where
 
 import Data.Char (chr)
@@ -22,6 +24,9 @@ import Data.Maybe (fromMaybe)
 import System.IO (Handle, hPutStrLn)
 import XMonad.Hooks.DynamicLog hiding (dzen)
 import qualified Colors
+
+import Graphics.X11.Xlib (openDisplay, rect_width)
+import Graphics.X11.Xinerama (getScreenInfo)
 
 data DzenConf = DzenConf
   { xPosition :: Maybe Int
@@ -194,3 +199,8 @@ filterDividers str
       | fg /= bg = mkSolidDivider fg bg 5
       | otherwise = mkLineDivider "#666666" 5
 
+getScreenWidth :: IO Int
+getScreenWidth = do
+  display <- openDisplay ""
+  screen <- getScreenInfo display
+  return $ fromIntegral $ rect_width $ head $ screen

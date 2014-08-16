@@ -13,7 +13,6 @@ import qualified Data.Map as M
 import Data.List (transpose)
 import Graphics.X11.Types (Window)
 import Graphics.X11.ExtraTypes
-import Graphics.X11.Xlib (openDisplay)
 import System.Posix.Unistd (getSystemID, nodeName)
 
 import Control.Monad (when)
@@ -28,7 +27,7 @@ import CurrentMachine
 
 spawn_mpd :: Bool -> String
 spawn_mpd True = conkyDzen (conkyFolder ++ "bl_main.conky") defaultDzenConf {
-      yPosition = Just 1200
+      yPosition = Just 3200
     , width = Just 900
     }
 spawn_mpd _ = ""
@@ -36,22 +35,17 @@ spawn_mpd _ = ""
 main = do
   -- get hostname, use to distinguish systems
   hostname <- getHostname
-  display <- openDisplay ""
-  screens <- countScreens
+  width <- getScreenWidth
   -- spawn dzen2 bars
-  spawnPipe $ conkyDzen (conkyFolder ++ "tr_main.conky") tr_dzen
+  spawnPipe $ conkyDzen (conkyFolder ++ "tr_main.conky") $ tr_dzen width
   spawnPipe $ conkyDzen (conkyFolder ++ "br_main." ++ hostname ++ ".conky") defaultDzenConf {
-      yPosition = Just 1200
-    , xPosition = if show_mpd then Just 500 else Just 0
-    , width = if show_mpd then Just 1500 else Just 2000
+      yPosition = Just 3200
+    , xPosition = if show_mpd then Just 1000 else Just 0
+    , width = if show_mpd then Just (width - 1000) else Just width
     , alignment = Just RightAlign
     }
   spawnPipe $ (spawn_mpd show_mpd)
   dh_dzen <- spawnPipe $ dzen tl_dzen
-  dh_dzen2 <- spawnPipe $ dzen (defaultDzenConf {
-    width = Just 1000
-  , screen = Just 1
-  })
   spawnPipe $ tray defaultTrayConf
   -- make xmonad
   xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig

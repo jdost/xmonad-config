@@ -44,10 +44,10 @@ layouts _ = avoidStruts $ smartBorders $ layoutHints
     nconf = defaultNormalConf
     normal = normalLayout nconf
 
-tr_dzen :: DzenConf
-tr_dzen = defaultDzenConf {
+tr_dzen :: Int -> DzenConf
+tr_dzen w = defaultDzenConf {
       xPosition = Just 1000
-    , width = Just 1000
+    , width = Just (w - 1000)
     , alignment = Just RightAlign
     }
 

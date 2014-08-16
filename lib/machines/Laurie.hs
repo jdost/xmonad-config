@@ -61,10 +61,10 @@ layouts _ = avoidStruts $ smartBorders $ layoutHints
     bconf = defaultBrowserConf
     browser = browserLayout bconf
 
-tr_dzen :: DzenConf
-tr_dzen = defaultDzenConf {
+tr_dzen :: Int -> DzenConf
+tr_dzen w = defaultDzenConf {
       xPosition = Just 600
-    , width = Just 1000
+    , width = Just (w - 600)
     , alignment = Just RightAlign
     }
 
