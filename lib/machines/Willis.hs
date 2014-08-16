@@ -16,7 +16,7 @@ import qualified Data.Map as M
 import Graphics.X11.ExtraTypes
 
 show_mpd :: Bool
-show_mpd = False
+show_mpd = True
 
 workspaces' :: [(String, String)]
 workspaces' = [("0_1", "1:main"), ("0_2", "2:web"),
