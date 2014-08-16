@@ -40,8 +40,8 @@ main = do
   spawnPipe $ conkyDzen (conkyFolder ++ "tr_main.conky") $ tr_dzen width
   spawnPipe $ conkyDzen (conkyFolder ++ "br_main." ++ hostname ++ ".conky") defaultDzenConf {
       yPosition = Just 3200
-    , xPosition = if show_mpd then Just 1000 else Just 0
-    , width = if show_mpd then Just (width - 1000) else Just width
+    , xPosition = if show_mpd then Just 900 else Just 0
+    , width = if show_mpd then Just (width - 900) else Just width
     , alignment = Just RightAlign
     }
   spawnPipe $ (spawn_mpd show_mpd)
