@@ -1,0 +1,31 @@
+background no
+out_to_console yes
+out_to_x no
+update_interval 5
+total_run_times 0
+use_spacer none
+
+template0 ^pa(;0)^r(1x12)^r(1x9)^r(1x6)^r(1x3)^pa(;2)^fg()
+
+color0 66CC66
+
+color3 333333
+color4 464646
+color5 585858
+
+
+TEXT
+^bg(\#414141)^fg(\#333333)\
+${template0}\
+^fg(\#66FF66) / ^fg()${fs_free /} (${fs_free_perc /}%) \
+\
+^bg(\#4C4C4C)^fg(\#414141)\
+${template0}\
+^fg(\#66FF66) /home ^fg()${fs_free /home} (${fs_free_perc /home}%) \
+\
+^bg(\#575757)^fg(\#4C4C4C)\
+${template0}\
+^fg(\#66FF66) /var ^fg()${fs_free /var} (${fs_free_perc /var}%) \
+   \
+
+# vim: ft=conkyrc
