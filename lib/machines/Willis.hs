@@ -29,6 +29,7 @@ keys' c = M.fromList $ []
   ++ KeyBindings.windowSizing
   ++ KeyBindings.layoutControl
   ++ KeyBindings.processControl defaultPromptConf
+  ++ KeyBindings.musicControl defaultMusicCommands
   ++ KeyBindings.extraKeys defaultExtraCommands
   ++ KeyBindings.workspaceChanging c
 

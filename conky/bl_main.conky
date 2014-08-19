@@ -7,9 +7,6 @@ use_spacer none
 
 template0 ^pa(;0)^r(1x3)^r(1x6)^r(1x9)^r(1x12)^pa(;2)^fg()
 
-mpd_host 127.0.0.1
-mpd_port 9009
-
 TEXT
 ^bg(\#575757)^fg(\#66FF66)\
   MPD  \

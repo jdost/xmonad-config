@@ -18,7 +18,7 @@ focusedWS    = ("#333333", "#339933") -- Active WS
 unfocusedWS  :: DzenColor
 unfocusedWS  = ("#333333", "#3399FF") -- WS on secondary monitor
 urgentWS     :: DzenColor
-urgentWS     = ("#333333", "#CCCC33") -- WS has triggered an UrgencyHook
+urgentWS     = ("#333333", "#FF9933") -- WS has triggered an UrgencyHook
 hiddenWS     :: DzenColor
 hiddenWS     = (   dzenFG, "#444444") -- WS w/ windows, but not visible
 emptyWS      :: DzenColor
