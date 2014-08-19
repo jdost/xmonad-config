@@ -52,6 +52,7 @@ run_pacman() {
    sudo pacman -S --needed dzen2 trayer
    sudo pacman -S --needed unclutter
    sudo pacman -S --needed xcompmgr
+   sudo pacman -S --needed dunst
 }
 
 build_arch() {
