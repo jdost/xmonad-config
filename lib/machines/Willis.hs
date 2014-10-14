@@ -40,7 +40,7 @@ hooks = composeAll . concat $
   ]
 
 layouts _ = avoidStruts $ smartBorders $ layoutHints
-    $ (normal ||| Mirror normal ||| Full)
+    $ (normal ||| Full)
   where
     nconf = defaultNormalConf
     normal = normalLayout nconf
