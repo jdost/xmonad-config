@@ -40,10 +40,11 @@ hooks = composeAll . concat $
   ]
 
 layouts _ = avoidStruts $ smartBorders $ layoutHints
-    $ (normal ||| Full)
+    $ (normal ||| full)
   where
-    nconf = defaultNormalConf
+    nconf = defaultNormalConf { ngaps = 50 }
     normal = normalLayout nconf
+    full = fullLayout defaultFullConf
 
 tr_dzen :: Int -> DzenConf
 tr_dzen w = defaultDzenConf {

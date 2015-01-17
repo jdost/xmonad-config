@@ -42,16 +42,18 @@ hooks = composeAll . concat $
   ]
 
 layouts _ = avoidStruts $ smartBorders $ layoutHints
-    $ onWorkspace "0_1" (mirror normal ||| Full)
-    $ onWorkspace "0_2" (browser || Full)
-    $ onWorkspace "0_3" (Full)
-    $ onWorkspace "1_2" (Mirror normal ||| Full)
-    $ (normal ||| Mirror normal ||| Full)
+    $ onWorkspace "0_1" (mirror normal ||| full)
+    $ onWorkspace "0_2" (browser || full)
+    $ onWorkspace "0_3" (full)
+    $ onWorkspace "1_2" (Mirror normal ||| full)
+    $ (normal ||| Mirror normal ||| full)
   where
     nconf   = defaultNormalConf
     normal  = normalLayout nconf
     bconf   = defaultBrowserConf
     browser = browserLayout bconf
+    fconf   = defaultFullConf
+    full    = fullLayout fconf
 
 tl_dzen :: DzenConf
 tl_dzen = defaultDzenConf {

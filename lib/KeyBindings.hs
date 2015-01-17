@@ -32,6 +32,7 @@ import XMonad ( (.|.) )
 import XMonad.Core
 import XMonad.Operations ( windows, sendMessage, refresh, screenWorkspace, kill, withFocused )
 import XMonad.Layout ( IncMasterN(IncMasterN), Resize(Shrink, Expand), ChangeLayout(NextLayout) )
+import XMonad.Layout.Gaps ( GapMessage( ToggleGaps ))
 import qualified XMonad.StackSet as W
 import XMonad.Layout.ResizableTile ( MirrorResize(MirrorShrink, MirrorExpand) )
 import XMonad.Layout.IndependentScreens ( onCurrentScreen, workspaces' )
@@ -88,6 +89,8 @@ windowSizing =
   -- ResizableTall layout keys
   , ((ms , xK_h), sendMessage MirrorShrink)
   , ((ms , xK_l), sendMessage MirrorExpand)
+  -- Gaps
+  , ((ms , xK_space), sendMessage ToggleGaps)
   ]
 
 layoutControl :: [KeyBinding]
