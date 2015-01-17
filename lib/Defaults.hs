@@ -10,7 +10,7 @@ defaultMouseFocus :: Bool
 defaultMouseFocus = False
 
 defaultBorderWidth :: Dimension
-defaultBorderWidth = 2
+defaultBorderWidth = 4
 
 defaultKillCmd :: String
 defaultKillCmd = "killall dzen2 trayer conky; xmonad --recompile; xmonad --restart"
