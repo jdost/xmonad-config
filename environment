@@ -1,6 +1,7 @@
 if [[ -n "$XINIT_LOAD" &&
    ( -z "$WINDOW_MANAGER" || "$WINDOW_MANAGER" == "xmonad" ) ]]; then
    export WINDOW_MANAGER="xmonad"
+   export RXVT_SOCKET="$HOME/.local/urxvtd"
 
    type xcompmgr > /dev/null && ! ps -A | grep xcompmgr > /dev/null && xcompmgr -Ffn &
    type unclutter > /dev/null && ! ps -A | grep unclutter > /dev/null && unclutter -idle 1 &
