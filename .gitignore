@@ -4,3 +4,4 @@ history
 xmonad.errors
 xmonad-*-linux
 lib/CurrentMachine.*
+conky/tr_main.conky

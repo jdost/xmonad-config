@@ -253,9 +253,9 @@ data MusicCommands = MusicCommands
 
 defaultMusicCommands :: MusicCommands
 defaultMusicCommands = MusicCommands
-  { next = "ncmpcpp next"
-  , prev = "ncmpcpp prev"
-  , toggle = "ncmpcpp toggle"
+  { next = "mpc next"
+  , prev = "mpc prev"
+  , toggle = "mpc toggle"
   }
 
 musicControl :: MusicCommands -> [KeyBinding]

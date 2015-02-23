@@ -53,6 +53,7 @@ run_pacman() {
    sudo pacman -S --needed unclutter
    sudo pacman -S --needed xcompmgr
    sudo pacman -S --needed dunst
+   sudo pacman -S --needed mpc
 }
 
 build_arch() {

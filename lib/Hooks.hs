@@ -4,6 +4,7 @@ module Hooks (
   , video
   , floats
   , ignores
+  , steam
 
   , makeHook
   , makeFloat
@@ -15,7 +16,7 @@ module Hooks (
 import XMonad ( Query )
 import XMonad.Core (WindowSet)
 import XMonad.ManageHook
-import XMonad.Hooks.ManageHelpers (doCenterFloat)
+import XMonad.Hooks.ManageHelpers (doCenterFloat, doFullFloat)
 
 import Data.Monoid (Monoid, Endo)
 -- Windows that are classified as browsers
@@ -26,6 +27,7 @@ games :: [String]
 games = ["Dwarf_Fortress", "Osmos",
     "com-threerings-yohoho-client-YoApp",
     "net-minecraft-MinecraftLauncher",
+    "steam", "Steam",
     -- emulators
     "dosbox", "VisualBoyAdvance"]
 -- Windows that are classified as video (for workspace moving)
@@ -55,3 +57,5 @@ setIgnores ignores' = makeHook doIgnore resource (ignores' ++ ignores)
 setShifts :: String -> ([String] -> MHReturn)
 setShifts ws = makeHook (doShift ws) className
 
+steam :: MHReturn
+steam = makeHook doFullFloat className ["steam"]
