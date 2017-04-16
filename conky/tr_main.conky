@@ -21,8 +21,8 @@ TEXT
 ^fg(\#5D5D5D)${template0}\
 ^bg(\#5D5D5D)^fg() \
 ^fg(\#66cc66)NET \
-^fg(\#99ff99)UP ^fg()${upspeedf wlan0} \
-^fg(\#99ff99)DOWN^fg() ${downspeedf wlan0} \
+^fg(\#99ff99)UP ^fg()${upspeedf enp3s0} \
+^fg(\#99ff99)DOWN^fg() ${downspeedf enp3s0} \
 \
 ^fg(\#666666)${template0}\
 ^bg(\#666666)^fg()\

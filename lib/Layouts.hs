@@ -29,11 +29,11 @@ import XMonad.Layout.Gaps
 
 layoutAliases :: [(String, String)]
 layoutAliases =
-  [ ("Hinted Spacing " ++ s ++ " ResizableTall", " RT")
-  , ("Hinted Mirror Spacing " ++ s ++ " ResizableTall", "MRT")
-  , ("Hinted Full", " F ")
-  , ("Hinted Spacing " ++ s ++ " TwoPane", " 2P")
-  , ("Hinted Spacing " ++ s ++ " IM Grid", " IM")
+  [ ("Spacing " ++ s ++ " ResizableTall", " RT")
+  , ("Mirror Spacing " ++ s ++ " ResizableTall", "MRT")
+  , ("Full", " F ")
+  , ("Spacing " ++ s ++ " TwoPane", " 2P")
+  , ("Spacing " ++ s ++ " IM Grid", " IM")
   ]
   where
     s = (show _space)

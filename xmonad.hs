@@ -7,7 +7,8 @@ import XMonad.Layout.IndependentScreens (countScreens)
 import XMonad.Util.Run (spawnPipe)
 
 import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
-import XMonad.Actions.UpdatePointer (updatePointer, PointerPosition(Relative) )
+import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Actions.UpdatePointer (updatePointer)
 
 import qualified Data.Map as M
 import Data.List (transpose)
@@ -48,7 +49,7 @@ main = do
   dh_dzen <- spawnPipe $ dzen tl_dzen
   spawnPipe $ tray defaultTrayConf
   -- make xmonad
-  xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
+  xmonad $ withUrgencyHook NoUrgencyHook $ ewmh defaultConfig
     { terminal = defaultTerminal
     , focusFollowsMouse = defaultMouseFocus
 

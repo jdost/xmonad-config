@@ -21,13 +21,14 @@ import XMonad.Hooks.ManageHelpers (doCenterFloat, doFullFloat)
 import Data.Monoid (Monoid, Endo)
 -- Windows that are classified as browsers
 browsers :: [String]
-browsers = ["Google-chrome", "Chromium", "Dwb", "Firefox", "Chrome"]
+browsers = ["Google-chrome", "Chromium", "Dwb", "Firefox", "Chrome", "qutebrowser"]
 -- Windows that are classified as games
 games :: [String]
 games = ["Dwarf_Fortress", "Osmos",
     "com-threerings-yohoho-client-YoApp",
     "net-minecraft-MinecraftLauncher",
     "steam", "Steam",
+    "lutris", "Lutris",
     -- emulators
     "dosbox", "VisualBoyAdvance"]
 -- Windows that are classified as video (for workspace moving)

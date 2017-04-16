@@ -1,7 +1,9 @@
 *.hi
 *.o
 history
+prompt-history
 xmonad.errors
+xmonad.state
 xmonad-*-linux
 lib/CurrentMachine.*
 conky/tr_main.conky

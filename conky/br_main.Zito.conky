@@ -25,11 +25,7 @@ ${template0}\
 \
 ^bg(\#575757)^fg(\#4C4C4C)\
 ${template0}\
-^fg(\#66FF66) /data1 ^fg()${fs_free /mnt/data1} (${fs_free_perc /mnt/data1}%) \
-\
-^bg(\#626262)^fg(\#575757)\
-${template0}\
-^fg(\#66FF66) /data2 ^fg()${fs_free /mnt/data2} (${fs_free_perc /mnt/data2}%) \
+^fg(\#66FF66) /data ^fg()${fs_free /data} (${fs_free_perc /data}%) \
    \
 
 # vim: ft=conkyrc

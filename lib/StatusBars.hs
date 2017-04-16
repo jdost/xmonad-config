@@ -130,6 +130,8 @@ data TrayConf = TrayConf
   , height' :: Maybe Int
   , tint :: Maybe String
   , transparent :: Maybe Bool
+  , expand :: Maybe Bool
+  , distance :: Maybe Int
   }
 
 tray :: TrayConf -> String
@@ -141,18 +143,22 @@ tray conf = unwords $ ["trayer"]
   ++ ["--widthtype", "request"]
   ++ addArg ("--tint", fmap show $ tint conf)
   ++ addArg ("--transparent", fmap show $ transparent conf)
+  ++ addArg ("--expand", fmap show $ expand conf)
+  ++ addArg ("--distance", fmap show $ distance conf)
   where
     addArg (_, Nothing) = []
     addArg (opt, Just val) = [opt, val]
 
 defaultTrayConf :: TrayConf
 defaultTrayConf = TrayConf
-  { edge = Just BottomAlign
-  , hAlignment = Just LeftAlign'
-  , pStrut = Just True
+  { edge = Just TopAlign
+  , hAlignment = Just RightAlign'
+  , pStrut = Just False
   , height' = Just 16
   , tint = Just "0x333333"
   , transparent = Just True
+  , expand = Just True
+  , distance = Just 15
   }
 
 data VTextAlignTray = TopAlign | BottomAlign
