@@ -29,6 +29,7 @@ import CurrentMachine
 spawn_mpd :: Bool -> String
 spawn_mpd True = conkyDzen (conkyFolder ++ "bl_main.conky") defaultDzenConf {
       yPosition = Just 3200
+    , height = barHeight
     , width = Just 900
     }
 spawn_mpd _ = ""
@@ -43,11 +44,14 @@ main = do
       yPosition = Just 3200
     , xPosition = if show_mpd then Just 900 else Just 0
     , width = if show_mpd then Just (width - 900) else Just width
+    , height = barHeight
     , alignment = Just RightAlign
     }
   spawnPipe $ (spawn_mpd show_mpd)
   dh_dzen <- spawnPipe $ dzen tl_dzen
-  spawnPipe $ tray defaultTrayConf
+  spawnPipe $ tray defaultTrayConf {
+    distance = barHeight
+  }
   -- make xmonad
   xmonad $ withUrgencyHook NoUrgencyHook $ ewmh defaultConfig
     { terminal = defaultTerminal
@@ -58,7 +62,7 @@ main = do
     , focusedBorderColor = C.focusedBorder
 
     , modMask = m
-    , workspaces = map fst workspaces'
+    , workspaces = workspaces'
     , keys = keys'
     , layoutHook = layouts ""
     , manageHook = manageHook defaultConfig <+> hooks <+> manageDocks

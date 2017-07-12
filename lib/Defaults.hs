@@ -22,7 +22,16 @@ defaultMHKeys :: [KeySym]
 defaultMHKeys = [xK_w, xK_e, xK_r]
 
 homeBin :: String
-homeBin = "~/.bin/"
+homeBin = "~/.local/bin/"
 
 conkyFolder :: String
 conkyFolder = "~/.xmonad/conky/"
+
+filteredCommands :: [String]
+filteredCommands = [
+    "chromedriver"
+  , "chroot" , "chrt"
+  , "steam-native" , "steam-runtime" , "steam-deps"
+  , "slabtop"
+  , "yacc"
+  ]

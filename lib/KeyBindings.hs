@@ -35,9 +35,8 @@ import XMonad.Layout ( IncMasterN(IncMasterN), Resize(Shrink, Expand), ChangeLay
 import XMonad.Layout.Gaps ( GapMessage( ToggleGaps ))
 import qualified XMonad.StackSet as W
 import XMonad.Layout.ResizableTile ( MirrorResize(MirrorShrink, MirrorExpand) )
-import XMonad.Layout.IndependentScreens ( onCurrentScreen, workspaces' )
-import XMonad.Prompt (XPConfig(..), defaultXPConfig, defaultXPKeymap, deleteAllDuplicates, XPPosition(..) )
-import XMonad.Prompt.Shell (shellPrompt)
+import XMonad.Prompt (XPConfig(..), defaultXPConfig, defaultXPKeymap, mkXPrompt, deleteAllDuplicates, XPPosition(..) )
+import XMonad.Prompt.Shell (Shell(..), getCommands, getShellCompl, shellPrompt)
 
 import XMonad.Actions.Search (promptSearch, intelligent, google, amazon,
   wikipedia, youtube, maps, namedEngine, (!>), prefixAware, searchEngine)
@@ -107,16 +106,16 @@ layoutControl =
 workspaceChanging :: XConfig Layout -> [KeyBinding]
 workspaceChanging conf =
   -- mod + # goes to workspace
-  [((m, k) , windows $ onCurrentScreen W.greedyView i)
+  [((m, k) , windows $ W.greedyView i)
     | (i, k) <- zip ws [xK_1, xK_2, xK_3, xK_4, xK_9]
   ]
   ++
   -- mod + shift + # moves window to workspace
-  [((ms, k), windows $ onCurrentScreen W.shift i)
+  [((ms, k), windows $ W.shift i)
     | (i, k) <- zip ws [xK_1 .. xK_9]
   ]
   where
-    ws = workspaces' conf
+    ws = (workspaces conf)
 
 multiHeadNavigation :: [KeySym] -> [KeyBinding]
 multiHeadNavigation monitorKeys =
@@ -212,12 +211,19 @@ defaultPromptConf = defaultXPConfig
   where
       iActions = ["feh", "chromimum"]
 
-processControl :: XPConfig -> [KeyBinding]
-processControl promptConf =
+iShellPrompt :: XPConfig -> [String] -> X ()
+iShellPrompt conf ignores = do
+  cmds <- io $ getCommands
+  let filterCmds = filter (\w -> w `notElem` ignores)
+  let cmdCompl = (getShellCompl (filterCmds cmds))
+  mkXPrompt Shell conf (cmdCompl $ searchPredicate conf) spawn
+
+processControl :: XPConfig -> [String] -> [KeyBinding]
+processControl promptConf ignoredCmds =
   -- These are the keys used to add/remove processes
   [ ((ms , xK_Return), spawn $ defaultTerminal)
   , ((ms      , xK_c), kill)
-  , ((m       , xK_p), shellPrompt promptConf)
+  , ((m       , xK_p), iShellPrompt promptConf ignoredCmds)
   ]
   ++
   -- This is an experiment with the search prompt

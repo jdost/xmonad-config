@@ -19,7 +19,7 @@ module StatusBars (
   ) where
 
 import Data.Char (chr)
-import Data.List (isInfixOf, isPrefixOf)
+import Data.List (isInfixOf, isPrefixOf, elemIndex)
 import Data.Maybe (fromMaybe)
 import System.IO (Handle, hPutStrLn)
 import XMonad.Hooks.DynamicLog hiding (dzen)
@@ -66,15 +66,15 @@ defaultDzenConf = DzenConf
 colorDelim :: Char
 colorDelim = chr 127
 colorDivider :: Char
-colorDivider = '|'
+colorDivider = chr 1
 
-defaultDHConf :: Handle -> String -> [(String, String)] -> [(String, String)] -> PP
+defaultDHConf :: Handle -> String -> [String] -> [(String, String)] -> PP
 defaultDHConf h screen' wslist layouts = defaultPP
-  { ppCurrent = wrapWS Colors.focusedWS . (\x -> dropWS x)
-  , ppVisible = wrapWS Colors.unfocusedWS . (\x -> dropWS x)
-  , ppHidden = wrapWS Colors.hiddenWS . (\x -> dropWS x)
-  , ppHiddenNoWindows = wrapWS Colors.emptyWS . (\x -> dropWS x)
-  , ppUrgent = wrapWS Colors.urgentWS . (\x -> dropWS x)
+  { ppCurrent = wrapWS Colors.focusedWS
+  , ppVisible = wrapWS Colors.unfocusedWS
+  , ppHidden = wrapWS Colors.hiddenWS
+  , ppHiddenNoWindows = wrapWS Colors.emptyWS
+  , ppUrgent = wrapWS Colors.urgentWS
   , ppSep = [colorDivider]
   , ppWsSep = [colorDivider]
   , ppTitle = wrapTitle Colors.activeTitle
@@ -83,23 +83,25 @@ defaultDHConf h screen' wslist layouts = defaultPP
   , ppOutput = (\x -> hPutStrLn h $ cleanStatus x)
   }
   where
-    cleanStatus s = concat $ map filterDividers $ strSplit colorDelim s
+    cleanStatus s = concat $ foldl (++) [] $ map convertDivider $ strSplit colorDelim s
     wrapWS _ "" = ""
-    wrapWS (fg,bg) name = (postBG bg) ++ (makeFG fg) ++ " " ++ name ++ " " ++ (preBG bg)
-    wrapLayout (fg,bg) name = (makeBG bg) ++ (makeFG fg) ++ " " ++
-        (lookup' name $ trans layouts name) ++ " " ++ (preBG bg)
+    wrapWS (fg,bg) name = (postBG bg) ++ (makeFG fg) ++
+        (clickable $ wsIndexLookup name) ++ " " ++ name ++ " ^ca()" ++ (preBG bg)
+    wrapLayout (fg,bg) name = (makeBG bg) ++ (makeFG fg) ++ (clickable Nothing) ++
+        " " ++ (lookup' name $ trans layouts name) ++ " ^ca()" ++ (preBG bg)
     wrapTitle (fg,bg) name = (postBG bg) ++ (makeFG fg) ++ "  " ++ name
     postBG bg = bg ++ [colorDelim]
     preBG bg = [colorDelim] ++ bg
     makeFG fg = "^fg(" ++ fg ++ ")"
     makeBG bg = "^bg(" ++ bg ++ ")"
+    clickable Nothing = "^ca(1,/usr/bin/xdotool key super+space)"
+    clickable (Just ws) = "^ca(1,/usr/bin/xdotool key super+" ++
+        (show (ws + 1)) ++ ")"
+    wsIndexLookup ws = elemIndex ws wslist
     trans table item = lookup item table
     lookup' orig trans'
       | trans' == Nothing = orig
       | otherwise = fromMaybe "" trans'
-    dropWS ws
-      | screen' `isPrefixOf` ws = lookup' ws $ trans wslist ws
-      | otherwise = ""
 
 dzen :: DzenConf -> String
 dzen c = unwords $ ["dzen2"]
@@ -171,24 +173,6 @@ instance Show HTextAlignTray where
   show RightAlign' = "right"
 
 -- DynamicHook fixers
-mkSolidDivider :: String -> String -> Int -> String
-mkSolidDivider _ _ 0 = ""
-mkSolidDivider fg bg n = colorLead $ concat $ map mkRect $ map scaleSizes sizes
-  where
-    sizes = [0..(n-1)]
-    scaleSizes = (\x -> n*3 - x*3)
-    mkRect = (\x -> "^r(1x" ++ show (x) ++ ")")
-    colorLead rects = "^pa(;0)^fg(" ++ fg ++ ")^bg(" ++ bg ++ ")" ++ rects ++ "^pa(;2)"
-
-mkLineDivider :: String -> Int -> String
-mkLineDivider _ 0 = ""
-mkLineDivider color n = colorLine $ concat $ map mkRect $ map scaleSizes sizes
-  where
-    sizes = [0..(n-1)]
-    scaleSizes = (\x -> (n-1)*3 - x*3)
-    mkRect = (\x -> "^pa(;" ++ show x ++ ")^r(1x3)")
-    colorLine rects = "^fg(" ++ color ++ ")" ++ rects ++ "^pa(;2)"
-
 strSplit :: Char -> String -> [String]
 strSplit _ "" = []
 strSplit c str = case dropWhile (== c) str of
@@ -196,14 +180,19 @@ strSplit c str = case dropWhile (== c) str of
     str' -> w : strSplit c str''
         where (w, str'') = break (== c) str'
 
-filterDividers :: String -> String
-filterDividers str
-  | length str == 15 && [colorDivider] `isInfixOf` str = makeDivider $ strSplit colorDivider str
-  | otherwise = str
+convertDivider :: String -> [String]
+convertDivider str
+  | [colorDivider] `isInfixOf` str = divider
+  | otherwise = [str]
   where
-    makeDivider (fg:bg:_)
-      | fg /= bg = mkSolidDivider fg bg 5
-      | otherwise = mkLineDivider "#666666" 5
+    (fg:bg:_) = strSplit colorDivider str
+    divider = if fg /= bg then diffDivider fg bg else sameDivider
+
+diffDivider :: String -> String -> [String]
+diffDivider c1 c2 =  ["^fg(", c1, ")^bg(", c2, ")", "\xee\x82\xbc"]
+
+sameDivider :: [String]
+sameDivider = ["^fg(#666666)", "\xee\x82\xbd"]
 
 getScreenWidth :: IO Int
 getScreenWidth = do

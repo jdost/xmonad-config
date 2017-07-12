@@ -5,6 +5,7 @@ module Hooks (
   , floats
   , ignores
   , steam
+  , chats
 
   , makeHook
   , makeFloat
@@ -40,6 +41,11 @@ floats = ["Wine"]
 -- Windows that get ignored by the focus loop
 ignores :: [String]
 ignores = ["trayer"]
+-- Windows that get classified as chat/communication
+chats :: [String]
+chats = ["yakyak", "YakYak",
+    "slack", "scudcloud", "ScudCloud", "ScudCloud Slack",
+    "twitch", "Twitch"]
 
 -- generic wrapper for the list comprehension
 makeHook :: (Eq a, Monoid b) => Query b -> Query a -> [a] -> [Query b]

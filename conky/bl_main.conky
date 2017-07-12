@@ -11,8 +11,8 @@ TEXT
 ^bg(\#575757)^fg(\#66FF66)\
   MPD  \
 ^fg(\#333333)\
-${template0}^bg() \
- ${mpd_smart} \
- (${mpd_status})
+^fg()^bg() \
+${mpd_smart} \
+(${mpd_status})
 
 # vim: ft=conkyrc
