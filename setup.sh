@@ -22,6 +22,7 @@ link() {
    # Shell/Environment
    linkIfNot environment $HOME/.local/environment/xmonad
    linkIfNot "" $HOME/.xmonad
+   linkIfNot dmrc $HOME/.dmrc
 
    LAYOUT_PATH="lib/machines/$HOSTNAME.hs"
    if [ ! -e $LAYOUT_PATH ]; then
