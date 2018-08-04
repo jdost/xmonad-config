@@ -1,18 +1,16 @@
-background no
-out_to_console yes
-out_to_x no
-update_interval 0.5
-total_run_times 0
-use_spacer none
+conky.config={
+background=false,
+out_to_console=true,
+out_to_x=false,
+update_interval=0.5,
+use_spacer="none",
+}
 
-template0 ^pa(;0)^r(1x3)^r(1x6)^r(1x9)^r(1x12)^pa(;2)^fg()
-
-TEXT
+conky.text = [[
 ^bg(\#575757)^fg(\#66FF66)\
   MPD  \
 ^fg(\#333333)\
 ^fg()^bg() \
-${mpd_smart} \
-(${mpd_status})
-
-# vim: ft=conkyrc
+$mpd_smart \
+($mpd_status)
+]]

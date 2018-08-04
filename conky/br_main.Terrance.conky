@@ -2,7 +2,7 @@ conky.config={
 background=false,
 out_to_console=true,
 out_to_x=false,
-update_interval=5,
+update_interval=0.5,
 use_spacer="none",
 }
 
@@ -15,14 +15,13 @@ conky.text = [[
 \
 ^fg(\#66FF66) /home ^fg()${fs_free /home} (${fs_free_perc /home}%) \
 \
-${if_match ${battery_percent} > 80}^bg(\#33CC33)\
-$else${if_match ${battery_percent} > 60}^bg(\#66CC33)\
-$else${if_match ${battery_percent} > 40}^bg(\#999933)\
-$else${if_match ${battery_percent} > 20}^bg(\#CC6633)\
+${if_match $battery_percent > 80}^bg(\#33CC33)\
+$else${if_match $battery_percent > 60}^bg(\#66CC33)\
+$else${if_match $battery_percent > 40}^bg(\#999933)\
+$else${if_match $battery_percent > 20}^bg(\#CC6633)\
 $else^bg(\#CC3333)\
 $endif$endif$endif$endif\
 ^fg(\#575757)\
  ^fg(\#000000)BAT ^fg(\#FFFFFF)${battery_short}    \
 
 ]]
-# vim: ft=conkyrc
