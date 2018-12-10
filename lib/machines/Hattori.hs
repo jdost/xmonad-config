@@ -30,6 +30,12 @@ promptConf' = defaultPromptConf
   , P.height = 33
   }
 
+extraCommands = defaultExtraCommands
+  { audio_up = "pamixer -i 5"
+  , audio_down = "pamixer -d 5"
+  , audio_toggle = "pamixer -t"
+  }
+
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' c = M.fromList $ []
   ++ KeyBindings.xmonadBasics defaultKillCmd defaultLockCmd
@@ -38,14 +44,17 @@ keys' c = M.fromList $ []
   ++ KeyBindings.layoutControl
   ++ KeyBindings.processControl promptConf' filteredCommands
   ++ KeyBindings.musicControl defaultMusicCommands
-  ++ KeyBindings.extraKeys defaultExtraCommands
+  ++ KeyBindings.extraKeys extraCommands
   ++ KeyBindings.workspaceChanging c
 
 hooks :: ManageHook
 hooks = composeAll . concat $
   [ setShifts "2:\xe744" browsers
+  , setShifts "3:\xf47f" games
   , setShifts "4:\xf0e6" chats
   , setIgnores ignores
+  , makeCenter floats
+  , makeCenter ["FTL"]
   , steam
   ]
 
@@ -62,14 +71,14 @@ layouts _ = smartBorders $ avoidStruts
 
 tr_dzen :: Int -> DzenConf
 tr_dzen w = defaultDzenConf {
-      xPosition = Just 1400
-    , width = Just (w - 1400)
+      xPosition = Just 700
+    , width = Just (w - 700)
     , height = barHeight
     , alignment = Just RightAlign
     }
 
 tl_dzen :: DzenConf
 tl_dzen = defaultDzenConf {
-      width = Just 1400
+      width = Just 700
     , height = barHeight
     }

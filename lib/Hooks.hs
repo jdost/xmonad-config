@@ -25,19 +25,21 @@ browsers :: [String]
 browsers = ["Google-chrome", "Chromium", "Dwb", "Firefox", "Chrome", "qutebrowser"]
 -- Windows that are classified as games
 games :: [String]
-games = ["Dwarf_Fortress", "Osmos",
+games = ["Dwarf_Fortress", "Osmos", "FTL",
     "com-threerings-yohoho-client-YoApp",
     "net-minecraft-MinecraftLauncher",
     "steam", "Steam",
     "lutris", "Lutris",
     -- emulators
+    "Snes9x", "Snes9x-gtk", "Snes",
     "dosbox", "VisualBoyAdvance"]
 -- Windows that are classified as video (for workspace moving)
 video :: [String]
 video = ["mplayer", "Vlc"]
 -- Windows that automatically float
 floats :: [String]
-floats = ["Wine"]
+floats = ["Wine", "Pinentry",
+    "Snes9x", "Snes9x-gtk", "Snes"]
 -- Windows that get ignored by the focus loop
 ignores :: [String]
 ignores = ["trayer"]

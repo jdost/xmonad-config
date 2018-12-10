@@ -34,4 +34,5 @@ filteredCommands = [
   , "steam-native" , "steam-runtime" , "steam-deps"
   , "slabtop"
   , "yacc"
+  , "snes9x", "snes9x-gtk"
   ]
