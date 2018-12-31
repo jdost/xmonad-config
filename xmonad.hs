@@ -1,7 +1,7 @@
 import XMonad
 import XMonad.Core
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP)
-import XMonad.Hooks.ManageDocks (manageDocks)
+import XMonad.Hooks.ManageDocks (manageDocks, docks)
 import XMonad.Hooks.UrgencyHook (withUrgencyHook, NoUrgencyHook(NoUrgencyHook) )
 import XMonad.Layout.IndependentScreens (countScreens)
 import XMonad.Util.Run (spawnPipe)
@@ -50,10 +50,11 @@ main = do
   spawnPipe $ (spawn_mpd show_mpd)
   dh_dzen <- spawnPipe $ dzen tl_dzen
   spawnPipe $ tray defaultTrayConf {
-    distance = barHeight
+      distance = barHeight
+    , height' = barHeight
   }
   -- make xmonad
-  xmonad $ withUrgencyHook NoUrgencyHook $ ewmh defaultConfig
+  xmonad $ withUrgencyHook NoUrgencyHook $ ewmh $ docks defaultConfig
     { terminal = defaultTerminal
     , focusFollowsMouse = defaultMouseFocus
 

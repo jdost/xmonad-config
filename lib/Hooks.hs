@@ -39,7 +39,8 @@ video = ["mplayer", "Vlc"]
 -- Windows that automatically float
 floats :: [String]
 floats = ["Wine", "Pinentry",
-    "Snes9x", "Snes9x-gtk", "Snes"]
+    "Snes9x", "Snes9x-gtk", "Snes",
+    "yubioath-desktop", "Yubico Authenticator"]
 -- Windows that get ignored by the focus loop
 ignores :: [String]
 ignores = ["trayer"]
@@ -47,7 +48,7 @@ ignores = ["trayer"]
 chats :: [String]
 chats = ["yakyak", "YakYak",
     "slack", "scudcloud", "ScudCloud", "ScudCloud Slack",
-    "twitch", "Twitch"]
+    "twitch", "Twitch", "discord", "Discord"]
 
 -- generic wrapper for the list comprehension
 makeHook :: (Eq a, Monoid b) => Query b -> Query a -> [a] -> [Query b]

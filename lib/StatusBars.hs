@@ -114,7 +114,7 @@ dzen c = unwords $ ["dzen2"]
     ++ addArg ("-w",  fmap show $ width c)
     ++ addArg ("-h",  fmap show $ height c)
     ++ addArg ("-xs", fmap show $ fmap (+1) $ screen c)
-    ++ ["-e", "'button2=;'"]
+    ++ ["-e", "'button2=;'", "-dock"]
   where
     quote = ("'" ++ ) . ( ++ "'")
     addArg (_, Nothing) = []

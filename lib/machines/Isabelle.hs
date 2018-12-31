@@ -1,0 +1,95 @@
+module CurrentMachine where
+
+import Layouts
+import Hooks
+import Defaults
+import KeyBindings
+import StatusBars
+
+import XMonad
+import XMonad.Hooks.ManageDocks (avoidStruts)
+import XMonad.Layout.LayoutHints (layoutHints)
+import XMonad.Layout.PerWorkspace (onWorkspace)
+import XMonad.Layout.NoBorders (smartBorders)
+import qualified XMonad.Prompt as P
+
+import qualified Data.Map as M
+import Graphics.X11.Types
+import Graphics.X11.ExtraTypes
+
+barHeight :: Maybe Int
+barHeight = Just 35
+
+show_mpd :: Bool
+show_mpd = False
+
+workspaces' :: [String]
+workspaces' = ["1:\xf120", "2:\xe744", "3:\xf47f", "4:\xf0e6", ""]
+
+promptConf' = defaultPromptConf
+  { P.font = "xft:UbuntuMono Nerd Font:size=11"
+  , P.height = 45
+  }
+
+musicCmds :: MusicCommands
+musicCmds = defaultMusicCommands
+  { next = "playerctl next"
+  , prev = "playerctl previous"
+  , toggle = "playerctl play-pause"
+  }
+
+extraCmds :: ExtraCommands
+extraCmds = defaultExtraCommands
+  { audio_up = "pulsemixer --change-volume +5"
+  , audio_down = "pulsemixer --change-volume -5"
+  , audio_toggle = "pulsemixer --toggle-mute"
+  }
+
+
+keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
+keys' c = M.fromList $ []
+  ++ KeyBindings.xmonadBasics defaultKillCmd defaultLockCmd
+  ++ KeyBindings.windowNavigation
+  ++ KeyBindings.windowSizing
+  ++ KeyBindings.layoutControl
+  ++ KeyBindings.processControl promptConf' filteredCommands
+  ++ KeyBindings.musicControl musicCmds
+  ++ KeyBindings.extraKeys extraCmds
+  ++ KeyBindings.workspaceChanging c
+  ++ [
+    ((m , xK_BackSpace), spawn (homeBin ++ "lock"))
+  , ((m , xK_Insert), spawn (homeBin ++ "display internal"))
+  ]
+
+hooks :: ManageHook
+hooks = composeAll . concat $
+  [ setShifts "2:\xe744" browsers
+  , setShifts "4:\xf0e6" chats
+  , setIgnores ignores
+  , makeCenter floats
+  ]
+
+layouts _ = smartBorders $ avoidStruts
+    $ onWorkspace "2:\xe744" (browser ||| full)
+    $ onWorkspace "4:\xf0e6" (browser ||| full)
+    $ (normal ||| full)
+  where
+    nconf = defaultNormalConf { ngaps = 60 }
+    normal = normalLayout nconf
+    bconf = defaultBrowserConf
+    browser = browserLayout bconf
+    full = fullLayout defaultFullConf
+
+tr_dzen :: Int -> DzenConf
+tr_dzen w = defaultDzenConf {
+      xPosition = Just 1100
+    , width = Just (w - 1100)
+    , height = barHeight
+    , alignment = Just RightAlign
+    }
+
+tl_dzen :: DzenConf
+tl_dzen = defaultDzenConf {
+      width = Just 1100
+    , height = barHeight
+    }

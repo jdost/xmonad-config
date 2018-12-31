@@ -48,7 +48,7 @@ aurGet() {
 run_pacman() {
    sudo pacman -Sy
    sudo pacman -S --needed xmonad xmonad-contrib
-   sudo pacman -S --needed xorg-xsetroot
+   sudo pacman -S --needed xorg-xsetroot xdotool
    sudo pacman -S --needed conky
    sudo pacman -S --needed dzen2 trayer
    sudo pacman -S --needed unclutter
