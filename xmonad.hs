@@ -53,6 +53,7 @@ main = do
       distance = barHeight
     , height' = barHeight
   }
+  spawnPipe $ notifier defaultNotificationConf
   -- make xmonad
   xmonad $ withUrgencyHook NoUrgencyHook $ ewmh $ docks defaultConfig
     { terminal = defaultTerminal

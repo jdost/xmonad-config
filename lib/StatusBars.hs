@@ -3,6 +3,7 @@ module StatusBars (
   , TextAlignDzen (..)
   , ScreenNum
   , TrayConf (..)
+  , NotificationConf (..)
   , VTextAlignTray (..)
   , HTextAlignTray (..)
 
@@ -14,6 +15,9 @@ module StatusBars (
 
   , defaultTrayConf
   , tray
+
+  , defaultNotificationConf
+  , notifier
 
   , getScreenWidth
   ) where
@@ -172,6 +176,17 @@ data HTextAlignTray = LeftAlign' | RightAlign'
 instance Show HTextAlignTray where
   show LeftAlign' = "left"
   show RightAlign' = "right"
+
+data NotificationConf = NotificationConf
+  {
+  }
+
+notifier :: NotificationConf -> String
+notifier conf = unwords $ ["dunst"]
+
+defaultNotificationConf = NotificationConf
+  {
+  }
 
 -- DynamicHook fixers
 strSplit :: Char -> String -> [String]

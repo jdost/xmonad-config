@@ -13,7 +13,7 @@ defaultBorderWidth :: Dimension
 defaultBorderWidth = 4
 
 defaultKillCmd :: String
-defaultKillCmd = "killall dzen2 trayer conky; xmonad --recompile; xmonad --restart"
+defaultKillCmd = "killall dzen2 trayer dunst conky; xmonad --recompile; xmonad --restart"
 
 defaultLockCmd :: String
 defaultLockCmd = "ncmpcpp pause; xscreensaver-command --lock"

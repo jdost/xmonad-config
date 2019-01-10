@@ -6,6 +6,5 @@ type compton > /dev/null && ! ps -A | grep compton > /dev/null && compton --conf
 type unclutter > /dev/null && ! ps -A | grep unclutter > /dev/null && unclutter -idle 1 &
 xsetroot -cursor_name left_ptr
 type urxvtd > /dev/null && ! ps -A | grep urxvtd > /dev/null && urxvtd -q -o -f
-type dunst > /dev/null && ! ps -A | grep dunst > /dev/null && dunst &
 
 # vim: ft=sh
