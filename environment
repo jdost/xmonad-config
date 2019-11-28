@@ -1,10 +1,13 @@
-export WINDOW_MANAGER="xmonad"
-export RXVT_SOCKET="$HOME/.local/urxvtd"
+if [[ ! -z "$XINIT_LOAD" ]]; then
+   export WINDOW_MANAGER="xmonad"
+   export RXVT_SOCKET="$HOME/.local/urxvtd"
 
-#type xcompmgr > /dev/null && ! ps -A | grep xcompmgr > /dev/null && xcompmgr -Ffn &
-type compton > /dev/null && ! ps -A | grep compton > /dev/null && compton --config $XDG_CONFIG_HOME/compton.conf -b &
-type unclutter > /dev/null && ! ps -A | grep unclutter > /dev/null && unclutter -idle 1 &
-xsetroot -cursor_name left_ptr
-type urxvtd > /dev/null && ! ps -A | grep urxvtd > /dev/null && urxvtd -q -o -f
+   #type xcompmgr > /dev/null && ! ps -A | grep xcompmgr > /dev/null && xcompmgr -Ffn &
+   type compton > /dev/null && ! ps -A | grep compton > /dev/null && compton --config $XDG_CONFIG_HOME/compton.conf -b &
+   type unclutter > /dev/null && ! ps -A | grep unclutter > /dev/null && unclutter -idle 1 &
+   xsetroot -cursor_name left_ptr
+   type urxvtd > /dev/null && ! ps -A | grep urxvtd > /dev/null && urxvtd -q -o -f
+   type dunst > /dev/null && ! ps -A | grep dunst > /dev/null && dunst &
+fi
 
 # vim: ft=sh

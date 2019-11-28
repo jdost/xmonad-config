@@ -18,35 +18,38 @@ import Graphics.X11.ExtraTypes
 show_mpd :: Bool
 show_mpd = True
 
-workspaces' :: [(String, String)]
-workspaces' = [("0_1", "1:main"), ("0_2", "2:web"), ("0_3", "3:games"),
-  ("0_4", "4:kim"), ("0_5", "")]
+barHeight :: Maybe Int
+barHeight = Just 15
+
+workspaces' :: [String]
+workspaces' = ["1:main", "2:web", "3:games", "4:kim", ""]
 
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' c = M.fromList $ []
   ++ KeyBindings.xmonadBasics defaultKillCmd defaultLockCmd
   ++ KeyBindings.windowNavigation
+  ++ KeyBindings.multiHeadNavigation [xK_o, xK_i]
   ++ KeyBindings.windowSizing
   ++ KeyBindings.layoutControl
-  ++ KeyBindings.processControl defaultPromptConf
+  ++ KeyBindings.processControl defaultPromptConf filteredCommands
   ++ KeyBindings.musicControl defaultMusicCommands
   ++ KeyBindings.extraKeys defaultExtraCommands
   ++ KeyBindings.workspaceChanging c
 
 hooks :: ManageHook
 hooks = composeAll . concat $
-  [ setShifts "0_2" ["qutebrowser"]
-  , setShifts "0_3" games
-  , setShifts "0_4" ["Chromium"]
+  [ setShifts "2:web" ["qutebrowser"]
+  , setShifts "3:games" games
+  , setShifts "4:kim" ["Chromium"]
   , setIgnores ignores
   , steam
   ]
 
 layouts _ = smartBorders $ avoidStruts
-    $ onWorkspace "0_1" (normal ||| full)
-    $ onWorkspace "0_2" (browser ||| full)
-    $ onWorkspace "0_3" (full)
-    $ onWorkspace "0_4" (full)
+    $ onWorkspace "1:main" (normal ||| full)
+    $ onWorkspace "2:web" (browser ||| full)
+    $ onWorkspace "3:games" (full)
+    $ onWorkspace "4:kim" (full)
     $ (normal ||| Mirror normal ||| full)
   where
     nconf   = defaultNormalConf
