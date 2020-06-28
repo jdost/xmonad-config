@@ -35,7 +35,7 @@ import XMonad.Layout ( IncMasterN(IncMasterN), Resize(Shrink, Expand), ChangeLay
 import XMonad.Layout.Gaps ( GapMessage( ToggleGaps ))
 import qualified XMonad.StackSet as W
 import XMonad.Layout.ResizableTile ( MirrorResize(MirrorShrink, MirrorExpand) )
-import XMonad.Prompt (XPConfig(..), defaultXPConfig, defaultXPKeymap, mkXPrompt, deleteAllDuplicates, XPPosition(..) )
+import XMonad.Prompt (XPConfig(..), defaultXPKeymap, mkXPrompt, deleteAllDuplicates, XPPosition(..) )
 import XMonad.Prompt.Shell (Shell(..), getCommands, getShellCompl, shellPrompt)
 
 import XMonad.Actions.Search (promptSearch, intelligent, google, amazon,
@@ -44,6 +44,7 @@ import XMonad.Actions.Search (promptSearch, intelligent, google, amazon,
 import System.Exit ( exitWith, ExitCode(ExitSuccess) )
 import Graphics.X11.Types
 import Graphics.X11.ExtraTypes
+import Data.Default (def)
 import Data.List (isPrefixOf, nub, filter, notElem)
 
 import Passwords
@@ -107,7 +108,7 @@ workspaceChanging :: XConfig Layout -> [KeyBinding]
 workspaceChanging conf =
   -- mod + # goes to workspace
   [((m, k) , windows $ W.greedyView i)
-    | (i, k) <- zip ws [xK_1, xK_2, xK_3, xK_4, xK_9]
+    | (i, k) <- zip ws [xK_1 .. xK_9]
   ]
   ++
   -- mod + shift + # moves window to workspace
@@ -189,8 +190,8 @@ dmenu conf = wrap "exe=`" "` && \"exec $exe\"" $ unwords $
     addFlag (f, True) = [f]
 
 defaultPromptConf :: XPConfig
-defaultPromptConf = defaultXPConfig
-  { font = "-*-ubuntu mono-medium-r-normal-*-11-*-*-*-*-*-*-*"
+defaultPromptConf = def
+  { font = "-*-ubuntumono nerd font mono-medium-r-normal-*-16-*-*-*-*-*-*-*"
   , bgColor = "#333333"
   , fgColor = "#EEEEEE"
   , fgHLight = "#333333"
@@ -213,7 +214,7 @@ defaultPromptConf = defaultXPConfig
 
 iShellPrompt :: XPConfig -> [String] -> X ()
 iShellPrompt conf ignores = do
-  cmds <- io $ getCommands
+  cmds <- io getCommands
   let filterCmds = filter (\w -> w `notElem` ignores)
   let cmdCompl = (getShellCompl (filterCmds cmds))
   mkXPrompt Shell conf (cmdCompl $ searchPredicate conf) spawn
@@ -223,7 +224,9 @@ processControl promptConf ignoredCmds =
   -- These are the keys used to add/remove processes
   [ ((ms , xK_Return), spawn $ defaultTerminal)
   , ((ms      , xK_c), kill)
-  , ((m       , xK_p), iShellPrompt promptConf ignoredCmds)
+  --, ((m       , xK_p), iShellPrompt promptConf ignoredCmds)
+  , ((m       , xK_p), spawn "rofi -show combi")
+  , ((m       , xK_bracketleft), spawn "kill -s USR1 $(pidof deadd-notification-center)")
   ]
   ++
   -- This is an experiment with the search prompt

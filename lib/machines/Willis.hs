@@ -15,9 +15,6 @@ import XMonad.Layout.NoBorders (smartBorders)
 import qualified Data.Map as M
 import Graphics.X11.ExtraTypes
 
-show_mpd :: Bool
-show_mpd = True
-
 workspaces' :: [(String, String)]
 workspaces' = [("0_1", "1:main"), ("0_2", "2:web"),
   ("0_3", "3:work"), ("0_4", "4:comm"), ("0_5", "")]
@@ -45,15 +42,3 @@ layouts _ = avoidStruts $ smartBorders $ layoutHints
     nconf = defaultNormalConf { ngaps = 50 }
     normal = normalLayout nconf
     full = fullLayout defaultFullConf
-
-tr_dzen :: Int -> DzenConf
-tr_dzen w = defaultDzenConf {
-      xPosition = Just 500
-    , width = Just (w - 500)
-    , alignment = Just RightAlign
-    }
-
-tl_dzen :: DzenConf
-tl_dzen = defaultDzenConf {
-      width = Just 500
-    }

@@ -4,7 +4,7 @@ import Graphics.X11.Xlib.Types (Dimension)
 import Graphics.X11.Types
 
 defaultTerminal :: String
-defaultTerminal = "urxvtc"
+defaultTerminal = "alacritty"
 
 defaultMouseFocus :: Bool
 defaultMouseFocus = False
@@ -13,7 +13,7 @@ defaultBorderWidth :: Dimension
 defaultBorderWidth = 4
 
 defaultKillCmd :: String
-defaultKillCmd = "killall dzen2 trayer dunst conky; xmonad --recompile; xmonad --restart"
+defaultKillCmd = "xmonad --recompile; xmonad --restart"
 
 defaultLockCmd :: String
 defaultLockCmd = "ncmpcpp pause; xscreensaver-command --lock"

@@ -1,0 +1,17 @@
+conky.config={
+background=false,
+out_to_console=true,
+out_to_x=false,
+update_interval=5,
+use_spacer="none",
+}
+
+conky.text = [[
+^bg(\#414141)^fg(\#333333)\
+^fg(\#66FF66) / ^fg()${fs_free /} (${fs_free_perc /}%) \
+^bg(\#4C4C4C)^fg(\#414141)\
+^fg(\#66FF66) /home ^fg()${fs_free /home} (${fs_free_perc /home}%) \
+^bg(\#575757)^fg(\#4C4C4C)\
+^fg(\#66FF66) /data ^fg()${fs_free /data} (${fs_free_perc /data}%) \
+   \
+]]

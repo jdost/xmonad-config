@@ -38,7 +38,7 @@ layoutAliases =
   where
     s = (show _space)
 
-_space :: Int
+_space :: Integer
 _space = 10
 
 _gaps :: Int
@@ -48,7 +48,7 @@ data NormalConf = NormalConf
   { nmaster  :: Int
   , ndelta   :: Rational
   , nratio   :: Rational
-  , nspace   :: Int
+  , nspace   :: Integer
   , ngaps    :: Int
   }
 
@@ -61,20 +61,23 @@ defaultNormalConf = NormalConf
   , ngaps = _gaps
   }
 
+--_spacing :: int => ModifiedLayout
+_spacing x = spacingRaw False (Border 0 0 0 0) False (Border x x x x) True
+
 --normalLayout :: (LayoutClass l a) => NormalConf -> ModifiedLayout Spacing ResizableTall a
-normalLayout c = spacing s $ gaps g $ ResizableTall m r d []
+normalLayout c = _spacing s $ gaps g $ ResizableTall m r d []
   where
     s = (nspace c)
     m = (nmaster c)
     d = (ndelta c)
     r = (nratio c)
-    gapsize = (ngaps c) - s
+    gapsize = (ngaps c)
     g = [(U, gapsize), (D, gapsize), (R, gapsize), (L, gapsize)]
 
 data BrowserConf = BrowserConf
   { bdelta :: Rational
   , bratio :: Rational
-  , bspace :: Int
+  , bspace :: Integer
   , bgaps  :: Int
   }
 
@@ -87,12 +90,12 @@ defaultBrowserConf = BrowserConf
   }
 -- TwoPane delta ratio
 --browserLayout :: (LayoutClass l a) => BrowserConf -> ModifiedLayout Spacing TwoPane a
-browserLayout c = spacing s $ gaps g $ TwoPane d r
+browserLayout c = _spacing s $ gaps g $ TwoPane d r
   where
     s = (bspace c)
     d = (bdelta c)
     r = (bratio c)
-    gapsize = (bgaps c) - s
+    gapsize = (bgaps c)
     g = [(U, gapsize), (D, gapsize), (R, gapsize), (L, gapsize)]
 
 data FullConf = FullConf
@@ -112,7 +115,7 @@ fullLayout c = gaps g $ Full
 data IMConf = IMConf
   { ilists      :: Property
   , ilist_ratio :: Rational
-  , ispace      :: Int
+  , ispace      :: Integer
   , igaps       :: Int
   }
 
@@ -125,10 +128,10 @@ defaultIMConf = IMConf
   }
 -- withIM (1/5) (Role "buddy_list") (Grid)
 --imLayout :: (LayoutClass l a) => IMConf -> ModifiedLayout Spacing (ModifiedLayout AddRoster Grid) a
-imLayout c = spacing s $ withIM lr l (gaps g $ Grid)
+imLayout c = _spacing s $ withIM lr l (gaps g $ Grid)
   where
     s = (ispace c)
     lr = (ilist_ratio c)
     l = (ilists c)
-    gapsize = (igaps c) - s
+    gapsize = (igaps c)
     g = [(U, gapsize), (D, gapsize), (R, gapsize), (L, gapsize)]

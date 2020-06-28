@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ -z "${TMUX:-}" ]]; then
+   # launch this within the tmux
+   if ! tmux list-sessions | grep "music"; then
+      tmux new-session -d -s music "$0"
+   fi
+   exec tmux attach-session -t music
+fi
+
+[[ ! -z "$(which cmus 2> /dev/null)" ]] && tmux new-window -a -n cmus cmus
+[[ ! -z "$(which pulsemixer 2> /dev/null)" ]] && tmux new-window -a -n mixer pulsemixer
+
+tmux select-window -t 1
+settitle ncspot
+exec ncspot

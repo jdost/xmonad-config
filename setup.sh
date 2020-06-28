@@ -1,11 +1,22 @@
 #/bin/sh
 
-if [ -z "$XDG_CONFIG_HOME" ]; then
-   export XDG_CONFIG_HOME=$HOME/.config
-fi
+set -euo pipefail
 
-####################################################################################
-# Linking {{{
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+
+show_help() {
+   cat <<-HELP
+Setup script for xmonad configuration
+
+USAGE: ${0} [command]
+
+commands:
+   init    -- Initialize system with expected packages and linked configs
+   update  -- Updates state of local repo and fixes any drift issues
+   link    -- Create missing links not already defined
+HELP
+}
+
 linkIfNot() {
    if [ -e $1 ]; then
       if [ ! -e $2 ]; then
@@ -30,62 +41,26 @@ link() {
    fi
 
    linkIfNot $LAYOUT_PATH $HOME/.xmonad/lib/CurrentMachine.hs
-} # }}}
-####################################################################################
-# Install - Arch {{{
-aurGet() {
-   local END_DIR=$PWD
-   cd $HOME/.aur/
-   ABBR=${1:0:2}
-   wget http://aur.archlinux.org/packages/$ABBR/$1/$1.tar.gz
-   tar -xf "$1.tar.gz"
-   rm "$1.tar.gz"
-   cd "$1"
-   makepkg -si
-   cd $END_DIR
+   mkdir -p $XDG_CONFIG_HOME/supervisord/config.d/
+   linkIfNot supervisor.d/urxvtd.conf $XDG_CONFIG_HOME/supervisord/config.d/urxvtd.conf
+   linkIfNot supervisor.d/unclutter.conf $XDG_CONFIG_HOME/supervisord/config.d/unclutter.conf
+   linkIfNot supervisor.d/polybar.conf $XDG_CONFIG_HOME/supervisord/config.d/statusbar.conf
 }
 
-run_pacman() {
+install() {
    sudo pacman -Sy
    sudo pacman -S --needed xmonad xmonad-contrib
    sudo pacman -S --needed xorg-xsetroot xdotool
-   sudo pacman -S --needed conky
-   sudo pacman -S --needed dzen2 trayer
+   #sudo pacman -S --needed conky
+   #sudo pacman -S --needed dzen2 trayer
+   #sudo pacman -S --needed polybar
    sudo pacman -S --needed unclutter
-   sudo pacman -S --needed xcompmgr
-   sudo pacman -S --needed dunst
-   sudo pacman -S --needed mpc
+   #sudo pacman -S --needed mpc
 }
 
-build_arch() {
-   run_pacman
-}
-
-update_arch() {
+update() {
    git pull
-   run_pacman
-   link
-} # }}}
-####################################################################################
-# Install - Ubuntu {{{
-run_apt() {
-   sudo apt-get update
-   sudo apt-get upgrade
-
-   sudo apt-get install xmonad
-   sudo apt-get install conky-cli dzen2
-   sudo apt-get install unclutter xcompmgr
 }
-
-build_ubuntu() {
-   run_apt
-}
-
-update_ubuntu() {
-   git pull
-   run_apt
-} # }}}
-####################################################################################
 
 if [ -z "${1}" ]; then
    echo "Missing action. Syntax: ${0} [command]"
@@ -96,18 +71,20 @@ if [ -z "${1}" ]; then
    echo ""
    exit 1
 fi
-case "${1}" in
+case "${1:-}" in
    'init')
-      command -v pacman >/dev/null 2>&1  && build_arch
-      command -v apt-get >/dev/null 2>&1 && build_ubuntu
+      install
       link
       ;;
    'update')
-      command -v pacman >/dev/null 2>&1  && update_arch
-      command -v apt-get >/dev/null 2>&1 && update_ubuntu
+      update
       link
       ;;
    'link')
       link
+      ;;
+   *)
+      show_help
+      exit
       ;;
 esac

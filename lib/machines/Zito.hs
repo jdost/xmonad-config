@@ -15,12 +15,6 @@ import XMonad.Layout.NoBorders (smartBorders)
 import qualified Data.Map as M
 import Graphics.X11.ExtraTypes
 
-show_mpd :: Bool
-show_mpd = True
-
-barHeight :: Maybe Int
-barHeight = Just 15
-
 workspaces' :: [String]
 workspaces' = ["1:main", "2:web", "3:games", "4:kim", ""]
 
@@ -58,15 +52,3 @@ layouts _ = smartBorders $ avoidStruts
     browser = browserLayout bconf
     fconf   = defaultFullConf
     full    = fullLayout fconf
-
-tl_dzen :: DzenConf
-tl_dzen = defaultDzenConf {
-      width = Just 1000
-    }
-
-tr_dzen :: Int -> DzenConf
-tr_dzen w = defaultDzenConf {
-      xPosition = Just 1000
-    , width = Just (w - 1000)
-    , alignment = Just RightAlign
-    }

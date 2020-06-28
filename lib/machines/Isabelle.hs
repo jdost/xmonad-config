@@ -17,12 +17,6 @@ import qualified Data.Map as M
 import Graphics.X11.Types
 import Graphics.X11.ExtraTypes
 
-barHeight :: Maybe Int
-barHeight = Just 35
-
-show_mpd :: Bool
-show_mpd = False
-
 workspaces' :: [String]
 workspaces' = ["1:\xf120", "2:\xe744", "3:\xf47f", "4:\xf0e6", ""]
 
@@ -44,7 +38,6 @@ extraCmds = defaultExtraCommands
   , audio_down = "pulsemixer --change-volume -5"
   , audio_toggle = "pulsemixer --toggle-mute"
   }
-
 
 keys' :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 keys' c = M.fromList $ []
@@ -79,17 +72,3 @@ layouts _ = smartBorders $ avoidStruts
     bconf = defaultBrowserConf
     browser = browserLayout bconf
     full = fullLayout defaultFullConf
-
-tr_dzen :: Int -> DzenConf
-tr_dzen w = defaultDzenConf {
-      xPosition = Just 1100
-    , width = Just (w - 1100)
-    , height = barHeight
-    , alignment = Just RightAlign
-    }
-
-tl_dzen :: DzenConf
-tl_dzen = defaultDzenConf {
-      width = Just 1100
-    , height = barHeight
-    }

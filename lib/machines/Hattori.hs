@@ -16,12 +16,6 @@ import qualified XMonad.Prompt as P
 import qualified Data.Map as M
 import Graphics.X11.ExtraTypes
 
-show_mpd :: Bool
-show_mpd = False
-
-barHeight :: Maybe Int
-barHeight = Just 22
-
 workspaces' :: [String]
 workspaces' = ["1:\xf120", "2:\xe744", "3:\xf47f", "4:\xf0e6", ""]
 
@@ -68,17 +62,3 @@ layouts _ = smartBorders $ avoidStruts
     bconf = defaultBrowserConf
     browser = browserLayout bconf
     full = fullLayout defaultFullConf
-
-tr_dzen :: Int -> DzenConf
-tr_dzen w = defaultDzenConf {
-      xPosition = Just 700
-    , width = Just (w - 700)
-    , height = barHeight
-    , alignment = Just RightAlign
-    }
-
-tl_dzen :: DzenConf
-tl_dzen = defaultDzenConf {
-      width = Just 700
-    , height = barHeight
-    }

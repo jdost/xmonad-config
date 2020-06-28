@@ -3,21 +3,18 @@ module StatusBars (
   , TextAlignDzen (..)
   , ScreenNum
   , TrayConf (..)
-  , NotificationConf (..)
   , VTextAlignTray (..)
   , HTextAlignTray (..)
 
   , defaultDzenConf
   , dzen
 
-  , defaultDHConf
+  , dzenDHConf
+  , polybarDHConf
   , conkyDzen
 
   , defaultTrayConf
   , tray
-
-  , defaultNotificationConf
-  , notifier
 
   , getScreenWidth
   ) where
@@ -72,8 +69,8 @@ colorDelim = chr 127
 colorDivider :: Char
 colorDivider = chr 1
 
-defaultDHConf :: Handle -> String -> [String] -> [(String, String)] -> PP
-defaultDHConf h screen' wslist layouts = defaultPP
+dzenDHConf :: Handle -> String -> [String] -> [(String, String)] -> PP
+dzenDHConf h screen' wslist layouts = def
   { ppCurrent = wrapWS Colors.focusedWS
   , ppVisible = wrapWS Colors.unfocusedWS
   , ppHidden = wrapWS Colors.hiddenWS
@@ -89,6 +86,7 @@ defaultDHConf h screen' wslist layouts = defaultPP
   where
     cleanStatus s = concat $ foldl (++) [] $ map convertDivider $ strSplit colorDelim s
     wrapWS _ "" = ""
+    wrapWS _ "NSP" = ""
     wrapWS (fg,bg) name = (postBG bg) ++ (makeFG fg) ++
         (clickable $ wsIndexLookup name) ++ " " ++ name ++ " ^ca()" ++ (preBG bg)
     wrapLayout (fg,bg) name = (makeBG bg) ++ (makeFG fg) ++ (clickable Nothing) ++
@@ -106,6 +104,31 @@ defaultDHConf h screen' wslist layouts = defaultPP
     lookup' orig trans'
       | trans' == Nothing = orig
       | otherwise = fromMaybe "" trans'
+
+polybarDHConf :: String -> [String] -> PP
+polybarDHConf fifo wslist = def
+  { ppCurrent = pbBG "#CC339933" . pbChangeWS
+  , ppVisible = pbBG "#CC333399" . pbChangeWS
+  , ppHidden = pbFG "#FFFFFF" . pbChangeWS
+  , ppHiddenNoWindows = pbFG Colors.hiddenPBWS . pbChangeWS
+  , ppUrgent = pbOL "#FF9933" . pbChangeWS
+  , ppSep = ""
+  , ppWsSep = ""
+  , ppOrder = \(ws:l:t:_) -> [ws]
+  , ppOutput = \x -> appendFile fifo (x ++ "\n")
+  }
+  where
+    pbBG color str = "%{B" ++ color ++ "}" ++ str ++ "%{B-}"
+    pbFG color str = "%{F" ++ color ++ "}" ++ str ++ "%{F-}"
+    pbUL color str = "%{u" ++ color ++ "}" ++ str ++ "%{-u}"
+    pbOL color str = "%{o" ++ color ++ "}" ++ str ++ "%{-o}"
+    pbChangeWS str = pbClickWS (wsIndexLookup str) str
+    pbClickWS Nothing str = ""
+    pbClickWS (Just i) str = "%{A1:/usr/bin/xdotool key super+" ++ (show (i + 1)) ++ ":} " ++ (wsName str) ++ " %{A}"
+    wsName "NSP" = ""
+    wsName ws = ws
+    wsIndexLookup ws = elemIndex ws wslist
+
 
 dzen :: DzenConf -> String
 dzen c = unwords $ ["dzen2"]
@@ -139,6 +162,7 @@ data TrayConf = TrayConf
   , transparent :: Maybe Bool
   , expand :: Maybe Bool
   , distance :: Maybe Int
+  , monitor :: Maybe String
   }
 
 tray :: TrayConf -> String
@@ -152,6 +176,7 @@ tray conf = unwords $ ["trayer"]
   ++ addArg ("--transparent", fmap show $ transparent conf)
   ++ addArg ("--expand", fmap show $ expand conf)
   ++ addArg ("--distance", fmap show $ distance conf)
+  ++ addArg ("--monitor", fmap show $ monitor conf)
   where
     addArg (_, Nothing) = []
     addArg (opt, Just val) = [opt, val]
@@ -159,13 +184,14 @@ tray conf = unwords $ ["trayer"]
 defaultTrayConf :: TrayConf
 defaultTrayConf = TrayConf
   { edge = Just TopAlign
-  , hAlignment = Just RightAlign'
+  , hAlignment = Just LeftAlign'
   , pStrut = Just False
-  , height' = Just 16
+  , height' = Just 30
   , tint = Just "0x333333"
   , transparent = Just True
   , expand = Just True
-  , distance = Just 15
+  , distance = Just 0
+  , monitor = Just "primary"
   }
 
 data VTextAlignTray = TopAlign | BottomAlign
@@ -176,17 +202,6 @@ data HTextAlignTray = LeftAlign' | RightAlign'
 instance Show HTextAlignTray where
   show LeftAlign' = "left"
   show RightAlign' = "right"
-
-data NotificationConf = NotificationConf
-  {
-  }
-
-notifier :: NotificationConf -> String
-notifier conf = unwords $ ["dunst"]
-
-defaultNotificationConf = NotificationConf
-  {
-  }
 
 -- DynamicHook fixers
 strSplit :: Char -> String -> [String]
