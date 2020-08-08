@@ -1,6 +1,8 @@
 [global/wm]
 margin-top = 0
 margin-bottom = 0
+include-file = ~/.config/polybar/modules
+include-file = ~/.config/polybar/system
 
 [settings]
 compositing-background = source
@@ -11,53 +13,6 @@ pseudo-transparency = false
 font-0 = "Anonymice Nerd Font Mono:size=16;2"
 font-1 = "Symbola:size=11"
 background = #33000000
-line-size = 4
+width = 100%
 
-modules-left = xmonad
-modules-center = title
-modules-right = cpu memory network date
-module-margin = 1
-fixed_center = true
-; Tray
-tray-position = right
-tray-offset-x = 0
-tray-offset-y = 0
-tray-maxsize = 12
-
-[module/xmonad]
-type = custom/script
-exec = tail -F /tmp/xmonad-polybar.log
-tail = true
-
-[module/title]
-type = internal/xwindow
-label-maxlen = 35
-
-[module/memory]
-type = internal/memory
-
-; Seconds to sleep between updates
-; Default: 1
-interval = 3
-label = "%{B#99339999}  %{B-}%{u#99339999}%gb_used%/%gb_total%%{-u}"
-
-[module/date]
-type = internal/date
-
-; Seconds to sleep between updates
-; Default: 1.0
-interval = 1.0
-
-; Optional time format
-time = %H:%M:%S
-label = "%{B#99339933}%{F#333}  %{B- F-}%{u#99339933}%time%%{-u}"
-
-[module/network]
-type = internal/network
-interface = enp2s0
-label-connected = "%{B#99993333} ﯴ %{B-}%{u#99993333}%upspeed:6%%{-u}%{B#99993333} ﯲ %{B-}%{u#99993333}%downspeed:6%%{-u}"
-
-[module/cpu]
-type = internal/cpu
-interval = 0.5
-label = "%{B#99333399}  %{B-}%{u#99333399}%percentage%%%{-u}"
+; vim:ft=dosini

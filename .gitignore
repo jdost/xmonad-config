@@ -7,3 +7,4 @@ xmonad.state
 xmonad-*-linux
 lib/CurrentMachine.*
 conky/tr_main.conky
+polybar/system

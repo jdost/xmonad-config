@@ -26,7 +26,12 @@ import StatusBars
 
 import CurrentMachine
 
+logFIFOPath :: String
+logFIFOPath = "/tmp/xmonad-polybar.log"
+
 main = do
+  do safeSpawn "mkfifo" [logFIFOPath]
+
   -- make xmonad
   xmonad $ withUrgencyHook NoUrgencyHook $ ewmh $ docks def
     { terminal = defaultTerminal
@@ -43,11 +48,6 @@ main = do
     , manageHook = manageHook def <+> hooks <+> manageDocks
 
     , logHook = do
-        dynamicLogWithPP $ polybarDHConf "/tmp/xmonad-polybar.log" workspaces'
+        dynamicLogWithPP $ polybarDHConf logFIFOPath workspaces'
     }
-
-getHostname :: IO String
-getHostname = do
-  host <- getSystemID
-  return $ nodeName host
 -- vim: ft=haskell

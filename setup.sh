@@ -41,6 +41,8 @@ link() {
    fi
 
    linkIfNot $LAYOUT_PATH $HOME/.xmonad/lib/CurrentMachine.hs
+   linkIfNot polybar $XDG_CONFIG_HOME/polybar
+   [[ ! -e polybar/system ]] && cp polybar/system.example polybar/system
    mkdir -p $XDG_CONFIG_HOME/supervisord/config.d/
    linkIfNot supervisor.d/urxvtd.conf $XDG_CONFIG_HOME/supervisord/config.d/urxvtd.conf
    linkIfNot supervisor.d/unclutter.conf $XDG_CONFIG_HOME/supervisord/config.d/unclutter.conf
